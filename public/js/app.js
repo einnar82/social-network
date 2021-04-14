@@ -24454,7 +24454,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".pointer-cursor[data-v-5634f174] {\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".pointer-cursor[data-v-5634f174] {\n  cursor: pointer;\n}\n.card-shade[data-v-5634f174] {\n  background-color: #dfe6e9;\n  border: 2px;\n  border-radius: 26px;\n}", ""]);
 
 // exports
 
@@ -24473,7 +24473,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".pointer-cursor[data-v-902deb82] {\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".pointer-cursor[data-v-902deb82] {\n  cursor: pointer;\n}\n.card-shade[data-v-902deb82] {\n  background-color: #f1f2f6;\n  border: 2px;\n  border-radius: 26px;\n}", ""]);
 
 // exports
 
@@ -24492,7 +24492,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".pointer-cursor[data-v-5c49133a] {\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".pointer-cursor[data-v-5c49133a] {\n  cursor: pointer;\n}\n.card-shade[data-v-5c49133a] {\n  background-color: #ced6e0;\n  border: 2px;\n  border-radius: 26px;\n}\n.shadow-override[data-v-5c49133a] {\n  box-shadow: none;\n  border: 0px;\n}", ""]);
 
 // exports
 
@@ -56822,7 +56822,7 @@ var render = function() {
   return _c("div", { staticClass: "card-content" }, [
     _c("div", { staticClass: "columns is-full is-mobile" }, [
       _c("div", { staticClass: "column is-11 is-offset-1" }, [
-        _c("div", { staticClass: "card-content" }, [
+        _c("div", { staticClass: "card-content card-shade" }, [
           _c("div", { staticClass: "media" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -56850,10 +56850,11 @@ var render = function() {
             _c(
               "p",
               {
-                staticClass: "subtitle is-5 pointer-cursor",
+                staticClass:
+                  "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
                 on: { click: _vm.showReplyBox }
               },
-              [_vm._v("\n            Comment\n          ")]
+              [_vm._v("\n            Reply\n          ")]
             ),
             _vm._v(" "),
             _c(
@@ -57003,7 +57004,7 @@ var render = function() {
   return _c("div", { staticClass: "card-content" }, [
     _c("div", { staticClass: "columns is-full is-mobile" }, [
       _c("div", { staticClass: "column is-10 is-offset-2" }, [
-        _c("div", { staticClass: "card-content" }, [
+        _c("div", { staticClass: "card-content card-shade" }, [
           _c("div", { staticClass: "media" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -57078,9 +57079,9 @@ var render = function() {
       _vm._l(_vm.posts, function(post) {
         return _c(
           "div",
-          { key: post.id, staticClass: "card" },
+          { key: post.id, staticClass: "card shadow-override" },
           [
-            _c("div", { staticClass: "card-content" }, [
+            _c("div", { staticClass: "card-content card-shade" }, [
               _c("div", { staticClass: "media" }, [
                 _vm._m(0, true),
                 _vm._v(" "),
@@ -57106,7 +57107,8 @@ var render = function() {
                 _c(
                   "p",
                   {
-                    staticClass: "subtitle is-5 pointer-cursor",
+                    staticClass:
+                      "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
                     on: { click: _vm.showCommentBox }
                   },
                   [_vm._v("\n            Comment\n          ")]

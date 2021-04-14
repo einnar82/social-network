@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" style="background-color:white">
         <index />
     </div>
 </body>

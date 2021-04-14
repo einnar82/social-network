@@ -2,7 +2,7 @@
   <div class="card-content">
     <div class="columns is-full is-mobile">
       <div class="column is-11 is-offset-1">
-        <div class="card-content">
+        <div class="card-content card-shade">
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
@@ -24,8 +24,8 @@
             <time datetime="2016-1-1" class="mgb-small">{{
               ago(comment.updated_at)
             }}</time>
-            <p class="subtitle is-5 pointer-cursor" @click="showReplyBox">
-              Comment
+            <p class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold" @click="showReplyBox">
+              Reply
             </p>
             <div class="columns" v-show="replyBox">
               <div class="column">
@@ -98,5 +98,11 @@ export default {
 <style scoped lang="scss">
 .pointer-cursor {
   cursor: pointer;
+}
+
+.card-shade {
+  background-color: #dfe6e9;
+  border: 2px;
+  border-radius: 26px;
 }
 </style>

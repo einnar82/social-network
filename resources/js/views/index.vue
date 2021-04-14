@@ -1,8 +1,8 @@
 <template>
   <div class="columns is-full is-mobile is-centered">
     <div class="column is-6">
-      <div class="card" v-for="post in posts" :key="post.id">
-        <div class="card-content">
+      <div class="card shadow-override" v-for="post in posts" :key="post.id">
+        <div class="card-content card-shade">
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
@@ -22,7 +22,10 @@
             {{ post.title }}
             <br />
             <time datetime="2016-1-1">{{ ago(post.updated_at) }}</time>
-            <p class="subtitle is-5 pointer-cursor" @click="showCommentBox">
+            <p
+              class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold"
+              @click="showCommentBox"
+            >
               Comment
             </p>
             <div class="columns" v-show="commentBox">
@@ -43,10 +46,7 @@
           </div>
         </div>
         <!--comment-->
-        <div
-          v-for="(comment, index) in post.comments"
-          :key="index"
-        >
+        <div v-for="(comment, index) in post.comments" :key="index">
           <comment-card
             @reply-box="showReplyBox(index)"
             :replyBox="comment.enable"
@@ -69,7 +69,7 @@
 import CommentCard from "../components/CommentCard.vue";
 import ReplyCard from "../components/ReplyCard.vue";
 import httpClient from "../helpers/http.js";
-import mixin from '../mixins'
+import mixin from "../mixins";
 export default {
   mixins: [mixin],
   components: { CommentCard, ReplyCard },
@@ -154,5 +154,16 @@ export default {
 <style scoped lang="scss">
 .pointer-cursor {
   cursor: pointer;
+}
+
+.card-shade {
+  background-color: #ced6e0;
+  border: 2px;
+  border-radius: 26px;
+}
+
+.shadow-override {
+  box-shadow: none;
+  border: 0px;
 }
 </style>
