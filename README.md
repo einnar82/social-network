@@ -13,4 +13,4 @@
     npm run dev
 
 **Note:**
-    The application be access on the root URL.
+    The application can be access on the root URL.
