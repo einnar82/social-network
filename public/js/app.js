@@ -56247,10 +56247,8 @@ var render = function() {
               ]
             )
           ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card" }, [
+        ]),
+        _vm._v(" "),
         _c("div", { staticClass: "card-content" }, [
           _vm._m(1),
           _vm._v(" "),
@@ -56370,7 +56368,7 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "media-content" }, [
-        _c("p", { staticClass: "title is-4" }, [_vm._v("John Smith")]),
+        _c("p", { staticClass: "title is-6" }, [_vm._v("John Smith")]),
         _vm._v(" "),
         _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@johnsmith")])
       ])
@@ -56380,39 +56378,43 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "columns is-full is-mobile" }, [
-      _c("div", { staticClass: "column is-10 is-offset-2" }, [
-        _c("div", { staticClass: "card-content" }, [
-          _c("div", { staticClass: "media" }, [
-            _c("div", { staticClass: "media-left" }, [
-              _c("figure", { staticClass: "image is-48x48" }, [
-                _c("img", {
-                  attrs: {
-                    src: "https://bulma.io/images/placeholders/96x96.png",
-                    alt: "Placeholder image"
-                  }
-                })
+    return _c("div", { staticClass: "card-content" }, [
+      _c("div", { staticClass: "columns is-full is-mobile" }, [
+        _c("div", { staticClass: "column is-10 is-offset-2" }, [
+          _c("div", { staticClass: "card-content" }, [
+            _c("div", { staticClass: "media" }, [
+              _c("div", { staticClass: "media-left" }, [
+                _c("figure", { staticClass: "image is-48x48" }, [
+                  _c("img", {
+                    attrs: {
+                      src: "https://bulma.io/images/placeholders/96x96.png",
+                      alt: "Placeholder image"
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "media-content" }, [
+                _c("p", { staticClass: "title is-6" }, [_vm._v("John Smith")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle is-6" }, [
+                  _vm._v("@johnsmith")
+                ])
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "media-content" }, [
-              _c("p", { staticClass: "title is-4" }, [_vm._v("John Smith")]),
+            _c("div", { staticClass: "content" }, [
+              _vm._v(
+                "\n                Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n                Phasellus nec iaculis mauris.\n                "
+              ),
+              _c("br"),
               _vm._v(" "),
-              _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@johnsmith")])
+              _c(
+                "time",
+                { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
+                [_vm._v("11:09 PM - 1 Jan 2016")]
+              )
             ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "content" }, [
-            _vm._v(
-              "\n              Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n              Phasellus nec iaculis mauris.\n              "
-            ),
-            _c("br"),
-            _vm._v(" "),
-            _c(
-              "time",
-              { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
-              [_vm._v("11:09 PM - 1 Jan 2016")]
-            )
           ])
         ])
       ])
