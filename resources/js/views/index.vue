@@ -43,7 +43,10 @@
           </div>
         </div>
         <!--comment-->
-        <div v-for="(comment, index) in post.comments" :key="index">
+        <div
+          v-for="(comment, index) in post.comments"
+          :key="index"
+        >
           <comment-card
             @reply-box="showReplyBox(index)"
             :replyBox="comment.enable"
@@ -52,7 +55,7 @@
           />
           <!--reply-->
           <reply-card
-            v-for="(child, index) in comment.children"
+            v-for="(child, index) in latestReplies(comment.children)"
             :key="index"
             :child="child"
           />
@@ -105,14 +108,15 @@ export default {
       }).then((response) => {
         const mutatedComment = {
           ...response.data,
-          enable: false
-        }
+          enable: false,
+        };
         this.posts[0].comments.unshift(mutatedComment);
         this.parent_comment_text = null;
       });
     },
     showReplyBox(index) {
-      this.posts[0].comments[index].enable = !this.posts[0].comments[index].enable;
+      this.posts[0].comments[index].enable = !this.posts[0].comments[index]
+        .enable;
     },
     fetchPosts() {
       httpClient({
@@ -132,17 +136,10 @@ export default {
             comments: [...mutatedComments],
           },
         ];
-
-        console.log([
-          {
-            ...post,
-            comments: [...mutatedComments],
-          },
-        ]);
       });
     },
     latestReplies(replies) {
-      return _get(replies)
+      return replies
         ? replies.length > 3
           ? replies.slice(0, 3).map((i) => i)
           : replies

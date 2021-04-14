@@ -64,9 +64,6 @@ export default {
   data: () => ({
     child_comment_text: null,
   }),
-  mounted() {
-    console.log("comment", this.comment);
-  },
   methods: {
     showReplyBox() {
       this.$emit("reply-box", this.replyBox);

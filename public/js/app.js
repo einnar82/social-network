@@ -1982,9 +1982,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       child_comment_text: null
     };
   },
-  mounted: function mounted() {
-    console.log("comment", this.comment);
-  },
   methods: {
     showReplyBox: function showReplyBox() {
       this.$emit("reply-box", this.replyBox);
@@ -2195,6 +2192,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2265,13 +2265,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.posts = [_objectSpread(_objectSpread({}, post), {}, {
           comments: _toConsumableArray(mutatedComments)
         })];
-        console.log([_objectSpread(_objectSpread({}, post), {}, {
-          comments: _toConsumableArray(mutatedComments)
-        })]);
       });
     },
     latestReplies: function latestReplies(replies) {
-      return Object(_helpers_lodash_get__WEBPACK_IMPORTED_MODULE_3__["default"])(replies) ? replies.length > 3 ? replies.slice(0, 3).map(function (i) {
+      return replies ? replies.length > 3 ? replies.slice(0, 3).map(function (i) {
         return i;
       }) : replies : [];
     }
@@ -56782,7 +56779,10 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _vm._l(comment.children, function(child, index) {
+                  _vm._l(_vm.latestReplies(comment.children), function(
+                    child,
+                    index
+                  ) {
                     return _c("reply-card", {
                       key: index,
                       attrs: { child: child }
