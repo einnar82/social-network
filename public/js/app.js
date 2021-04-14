@@ -2113,6 +2113,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ReplyCard_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/ReplyCard.vue */ "./resources/js/components/ReplyCard.vue");
 /* harmony import */ var _helpers_http_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/http.js */ "./resources/js/helpers/http.js");
 /* harmony import */ var _helpers_lodash_get__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/lodash-get */ "./resources/js/helpers/lodash-get.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2196,7 +2208,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       commentBox: false,
-      replyBox: false,
       posts: [{
         comments: []
       }],
@@ -2226,13 +2237,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         method: "post",
         data: _objectSpread({}, originalPayload)
       }).then(function (response) {
-        _this.posts[0].comments.unshift(response.data);
+        var mutatedComment = _objectSpread(_objectSpread({}, response.data), {}, {
+          enable: false
+        });
+
+        _this.posts[0].comments.unshift(mutatedComment);
 
         _this.parent_comment_text = null;
       });
     },
     showReplyBox: function showReplyBox(index) {
-      this.replyBox = !this.replyBox;
+      this.posts[0].comments[index].enable = !this.posts[0].comments[index].enable;
     },
     fetchPosts: function fetchPosts() {
       var _this2 = this;
@@ -2241,7 +2256,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         url: "/posts",
         method: "get"
       }).then(function (response) {
-        _this2.posts = response.data;
+        var post = response.data[0];
+        var mutatedComments = response.data[0].comments.map(function (comment) {
+          return _objectSpread(_objectSpread({}, comment), {}, {
+            enable: false
+          });
+        });
+        _this2.posts = [_objectSpread(_objectSpread({}, post), {}, {
+          comments: _toConsumableArray(mutatedComments)
+        })];
+        console.log([_objectSpread(_objectSpread({}, post), {}, {
+          comments: _toConsumableArray(mutatedComments)
+        })]);
       });
     },
     latestReplies: function latestReplies(replies) {
@@ -56747,7 +56773,7 @@ var render = function() {
                 { key: index },
                 [
                   _c("comment-card", {
-                    attrs: { replyBox: _vm.replyBox, comment: comment },
+                    attrs: { replyBox: comment.enable, comment: comment },
                     on: {
                       "reply-box": function($event) {
                         return _vm.showReplyBox(index)

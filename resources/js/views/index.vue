@@ -46,7 +46,7 @@
         <div v-for="(comment, index) in post.comments" :key="index">
           <comment-card
             @reply-box="showReplyBox(index)"
-            :replyBox="replyBox"
+            :replyBox="comment.enable"
             :comment="comment"
             @send-child-comment="sendChildComment"
           />
@@ -72,7 +72,6 @@ export default {
   name: "index",
   data: () => ({
     commentBox: false,
-    replyBox: false,
     posts: [
       {
         comments: [],
@@ -88,7 +87,7 @@ export default {
       this.commentBox = !this.commentBox;
     },
     sendChildComment(comment) {
-      this.fetchPosts()
+      this.fetchPosts();
     },
     sendComment() {
       const originalPayload = {
@@ -104,19 +103,42 @@ export default {
           ...originalPayload,
         },
       }).then((response) => {
-        this.posts[0].comments.unshift(response.data);
+        const mutatedComment = {
+          ...response.data,
+          enable: false
+        }
+        this.posts[0].comments.unshift(mutatedComment);
         this.parent_comment_text = null;
       });
     },
     showReplyBox(index) {
-      this.replyBox = !this.replyBox;
+      this.posts[0].comments[index].enable = !this.posts[0].comments[index].enable;
     },
     fetchPosts() {
       httpClient({
         url: "/posts",
         method: "get",
       }).then((response) => {
-        this.posts = response.data;
+        const post = response.data[0];
+        const mutatedComments = response.data[0].comments.map((comment) => {
+          return {
+            ...comment,
+            enable: false,
+          };
+        });
+        this.posts = [
+          {
+            ...post,
+            comments: [...mutatedComments],
+          },
+        ];
+
+        console.log([
+          {
+            ...post,
+            comments: [...mutatedComments],
+          },
+        ]);
       });
     },
     latestReplies(replies) {
