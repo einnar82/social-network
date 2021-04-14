@@ -2058,11 +2058,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "index",
   data: function data() {
     return {
-      commentBox: false
+      commentBox: false,
+      replyBox: false
     };
   },
   methods: {
@@ -2071,6 +2079,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     sendComment: function sendComment() {
       console.log("sending a comment");
+    },
+    showReplyBox: function showReplyBox() {
+      this.replyBox = !this.replyBox;
     }
   }
 });
@@ -56243,44 +56254,74 @@ var render = function() {
         _c("div", { staticClass: "card-content" }, [
           _vm._m(1),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "content" },
-            [
-              _vm._v(
-                "\n          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus\n          nec iaculis mauris.\n          "
-              ),
-              _c("br"),
-              _vm._v(" "),
-              _c(
-                "time",
-                { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
-                [_vm._v("11:09 PM - 1 Jan 2016")]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-field",
-                { attrs: { label: "Add a comment" } },
-                [
-                  _c("b-input", {
-                    attrs: {
-                      maxlength: "200",
-                      type: "textarea",
-                      size: "is-small"
-                    }
-                  })
+          _c("div", { staticClass: "content" }, [
+            _vm._v(
+              "\n          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus\n          nec iaculis mauris.\n          "
+            ),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "time",
+              { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
+              [_vm._v("11:09 PM - 1 Jan 2016")]
+            ),
+            _vm._v(" "),
+            _c(
+              "p",
+              {
+                staticClass: "subtitle is-5 pointer-cursor",
+                on: { click: _vm.showReplyBox }
+              },
+              [_vm._v("\n            Comment\n          ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.replyBox,
+                    expression: "replyBox"
+                  }
                 ],
-                1
-              ),
-              _vm._v(" "),
-              _c("b-button", { attrs: { type: "is-primary" } }, [
-                _vm._v("Comment")
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "subtitle is-5" }, [_vm._v("Reply")])
-            ],
-            1
-          )
+                staticClass: "columns"
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "column" },
+                  [
+                    _c(
+                      "b-field",
+                      { attrs: { label: "Add a comment" } },
+                      [
+                        _c("b-input", {
+                          attrs: {
+                            maxlength: "200",
+                            type: "textarea",
+                            size: "is-small"
+                          }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-button",
+                      {
+                        attrs: { type: "is-primary" },
+                        on: { click: _vm.sendComment }
+                      },
+                      [_vm._v("Comment")]
+                    )
+                  ],
+                  1
+                )
+              ]
+            )
+          ])
         ]),
         _vm._v(" "),
         _vm._m(2)
@@ -56371,9 +56412,7 @@ var staticRenderFns = [
               "time",
               { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
               [_vm._v("11:09 PM - 1 Jan 2016")]
-            ),
-            _vm._v(" "),
-            _c("p", { staticClass: "subtitle is-5" }, [_vm._v("Reply")])
+            )
           ])
         ])
       ])

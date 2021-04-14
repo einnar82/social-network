@@ -68,15 +68,23 @@
             <time datetime="2016-1-1" class="mgb-small"
               >11:09 PM - 1 Jan 2016</time
             >
-            <b-field label="Add a comment">
-              <b-input
-                maxlength="200"
-                type="textarea"
-                size="is-small"
-              ></b-input>
-            </b-field>
-            <b-button type="is-primary">Comment</b-button>
-            <p class="subtitle is-5">Reply</p>
+            <p class="subtitle is-5 pointer-cursor" @click="showReplyBox">
+              Comment
+            </p>
+            <div class="columns" v-show="replyBox">
+              <div class="column">
+                <b-field label="Add a comment">
+                  <b-input
+                    maxlength="200"
+                    type="textarea"
+                    size="is-small"
+                  ></b-input>
+                </b-field>
+                <b-button type="is-primary" @click="sendComment"
+                  >Comment</b-button
+                >
+              </div>
+            </div>
           </div>
         </div>
         <!--reply-->
@@ -105,7 +113,6 @@
                 <time datetime="2016-1-1" class="mgb-small"
                   >11:09 PM - 1 Jan 2016</time
                 >
-                <p class="subtitle is-5">Reply</p>
               </div>
             </div>
           </div>
@@ -120,6 +127,7 @@ export default {
   name: "index",
   data: () => ({
     commentBox: false,
+    replyBox: false
   }),
   methods: {
     showCommentBox() {
@@ -128,6 +136,9 @@ export default {
     sendComment() {
       console.log("sending a comment");
     },
+    showReplyBox() {
+        this.replyBox = !this.replyBox
+    }
   },
 };
 </script>
