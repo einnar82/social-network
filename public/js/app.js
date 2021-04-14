@@ -1908,7 +1908,12 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1968,20 +1973,41 @@ __webpack_require__.r(__webpack_exports__);
     },
     comment: {
       type: Object
-    },
-    child_comment_text: {
-      type: String
     }
+  },
+  data: function data() {
+    return {
+      child_comment_text: null
+    };
+  },
+  mounted: function mounted() {
+    console.log("comment", this.comment);
   },
   methods: {
     showReplyBox: function showReplyBox() {
       this.$emit("reply-box", this.replyBox);
     },
     sendComment: function sendComment() {
-      this.$emit("send-child-comment", this.replyBox);
-    },
-    changeChildComment: function changeChildComment(comment) {
-      this.$emit("change-child-comment", comment);
+      var _this = this;
+
+      var originalPayload = {
+        parent_id: this.comment.id,
+        post_id: 1,
+        name: "Rannie Ollit",
+        comment_text: this.child_comment_text
+      };
+      httpClient({
+        url: "/comments",
+        method: "post",
+        data: _objectSpread({}, originalPayload)
+      }).then(function (response) {
+        _this.posts[0].comments.unshift(response.data); // this.posts = response.data;
+
+
+        console.log(response.data);
+
+        _this.$emit("send-child-comment", _this.replyBox);
+      });
     }
   }
 });
@@ -2156,8 +2182,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -2172,7 +2196,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       commentBox: false,
       replyBox: false,
-      posts: [],
+      posts: [{
+        comments: []
+      }],
       parent_comment_text: null
     };
   },
@@ -2182,25 +2208,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     showCommentBox: function showCommentBox() {
       this.commentBox = !this.commentBox;
-    },
-    sendChildComment: function sendChildComment(parent_id) {
-      var originalPayload = {
-        parent_id: parent_id,
-        post_id: 1,
-        name: "Rannie Ollit",
-        comment_text: this.parent_comment_text
-      };
-      console.log(originalPayload); // httpClient({
-      //   url: "/comments",
-      //   method: "post",
-      //   data: {
-      //     ...originalPayload,
-      //   },
-      // }).then((response) => {
-      //   this.posts[0].comments.unshift(response.data);
-      //   // this.posts = response.data;
-      //   console.log(response.data);
-      // });
     },
     sendComment: function sendComment() {
       var _this = this;
@@ -56449,7 +56456,6 @@ var render = function() {
                             type: "textarea",
                             size: "is-small"
                           },
-                          on: { change: _vm.changeChildComment },
                           model: {
                             value: _vm.child_comment_text,
                             callback: function($$v) {
@@ -56744,12 +56750,6 @@ var render = function() {
                     on: {
                       "reply-box": function($event) {
                         return _vm.showReplyBox(index)
-                      },
-                      "send-child-comment": function($event) {
-                        return _vm.sendChildComment(comment.id)
-                      },
-                      "change-child-comment": function($event) {
-                        return _vm.changeChildComment(_vm.text)
                       }
                     }
                   }),

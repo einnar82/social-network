@@ -46,8 +46,6 @@
         <div v-for="(comment, index) in post.comments" :key="index">
           <comment-card
             @reply-box="showReplyBox(index)"
-            @send-child-comment="sendChildComment(comment.id)"
-            @change-child-comment="changeChildComment(text)"
             :replyBox="replyBox"
             :comment="comment"
           />
@@ -74,7 +72,11 @@ export default {
   data: () => ({
     commentBox: false,
     replyBox: false,
-    posts: [],
+    posts: [
+      {
+        comments: [],
+      },
+    ],
     parent_comment_text: null,
   }),
   mounted() {
@@ -83,26 +85,6 @@ export default {
   methods: {
     showCommentBox() {
       this.commentBox = !this.commentBox;
-    },
-    sendChildComment(parent_id) {
-      const originalPayload = {
-        parent_id: parent_id,
-        post_id: 1,
-        name: "Rannie Ollit",
-        comment_text: this.parent_comment_text,
-      };
-      console.log(originalPayload)
-      // httpClient({
-      //   url: "/comments",
-      //   method: "post",
-      //   data: {
-      //     ...originalPayload,
-      //   },
-      // }).then((response) => {
-      //   this.posts[0].comments.unshift(response.data);
-      //   // this.posts = response.data;
-      //   console.log(response.data);
-      // });
     },
     sendComment() {
       const originalPayload = {
@@ -119,7 +101,7 @@ export default {
         },
       }).then((response) => {
         this.posts[0].comments.unshift(response.data);
-        this.parent_comment_text = null
+        this.parent_comment_text = null;
         // this.posts = response.data;
         console.log(response.data);
       });

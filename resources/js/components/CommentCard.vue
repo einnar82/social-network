@@ -35,7 +35,6 @@
                     type="textarea"
                     size="is-small"
                     v-model="child_comment_text"
-                    @change="changeChildComment"
                   ></b-input>
                 </b-field>
                 <b-button type="is-primary" @click="sendComment"
@@ -60,21 +59,36 @@ export default {
     comment: {
       type: Object,
     },
-    child_comment_text: {
-      type: String
-    }
+  },
+  data: () => ({
+    child_comment_text: null,
+  }),
+  mounted() {
+    console.log("comment", this.comment);
   },
   methods: {
     showReplyBox() {
       this.$emit("reply-box", this.replyBox);
     },
-
     sendComment() {
-      this.$emit("send-child-comment", this.replyBox);
-    },
-
-    changeChildComment(comment) {
-      this.$emit("change-child-comment", comment);
+      const originalPayload = {
+        parent_id: this.comment.id,
+        post_id: 1,
+        name: "Rannie Ollit",
+        comment_text: this.child_comment_text,
+      };
+      httpClient({
+        url: "/comments",
+        method: "post",
+        data: {
+          ...originalPayload,
+        },
+      }).then((response) => {
+        this.posts[0].comments.unshift(response.data);
+        // this.posts = response.data;
+        console.log(response.data);
+        this.$emit("send-child-comment", this.replyBox);
+      });
     }
   },
 };
