@@ -12,7 +12,7 @@ class CommentsController extends Controller
 {
     public function addComment(AddCommentRequest $request)
     {
-        Comment::create($request->all());
+        return Comment::create($request->all());
     }
 
     public function getComments(Request $request)
