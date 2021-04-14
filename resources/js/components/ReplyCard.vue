@@ -22,7 +22,7 @@
             {{ child.comment_text }}
             <br />
             <time datetime="2016-1-1" class="mgb-small">{{
-              child.updated_at
+              ago(child.updated_at)
             }}</time>
           </div>
         </div>
@@ -32,13 +32,15 @@
 </template>
 
 <script>
+import mixin from "../mixins";
 export default {
+  mixins: [mixin],
   name: "ReplyCard",
   props: {
     child: {
       type: Object,
     },
-  }
+  },
 };
 </script>
 

@@ -22,7 +22,7 @@
             {{ comment.comment_text }}
             <br />
             <time datetime="2016-1-1" class="mgb-small">{{
-              comment.updated_at
+              ago(comment.updated_at)
             }}</time>
             <p class="subtitle is-5 pointer-cursor" @click="showReplyBox">
               Comment
@@ -50,8 +50,11 @@
 </template>
 
 <script>
-import httpClient from '../helpers/http'
+import httpClient from "../helpers/http";
+import mixin from '../mixins';
+
 export default {
+  mixins: [mixin],
   name: "CommentCard",
   props: {
     replyBox: {
@@ -82,12 +85,12 @@ export default {
           ...originalPayload,
         },
       }).then((response) => {
-        this.child_comment_text = null
+        this.child_comment_text = null;
         // this.posts[0].comments.unshift(response.data);
         // this.posts = response.data;
         this.$emit("send-child-comment", response.data);
       });
-    }
+    },
   },
 };
 </script>

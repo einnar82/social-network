@@ -21,7 +21,7 @@
           <div class="content">
             {{ post.title }}
             <br />
-            <time datetime="2016-1-1">{{ post.updated_at }}</time>
+            <time datetime="2016-1-1">{{ ago(post.updated_at) }}</time>
             <p class="subtitle is-5 pointer-cursor" @click="showCommentBox">
               Comment
             </p>
@@ -69,8 +69,9 @@
 import CommentCard from "../components/CommentCard.vue";
 import ReplyCard from "../components/ReplyCard.vue";
 import httpClient from "../helpers/http.js";
-import _get from "../helpers/lodash-get";
+import mixin from '../mixins'
 export default {
+  mixins: [mixin],
   components: { CommentCard, ReplyCard },
   name: "index",
   data: () => ({
