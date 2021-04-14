@@ -48,6 +48,7 @@
             @reply-box="showReplyBox(index)"
             :replyBox="replyBox"
             :comment="comment"
+            @send-child-comment="sendChildComment"
           />
           <!--reply-->
           <reply-card
@@ -86,6 +87,9 @@ export default {
     showCommentBox() {
       this.commentBox = !this.commentBox;
     },
+    sendChildComment(comment) {
+      this.fetchPosts()
+    },
     sendComment() {
       const originalPayload = {
         post_id: 1,
@@ -102,8 +106,6 @@ export default {
       }).then((response) => {
         this.posts[0].comments.unshift(response.data);
         this.parent_comment_text = null;
-        // this.posts = response.data;
-        console.log(response.data);
       });
     },
     showReplyBox(index) {
@@ -115,7 +117,6 @@ export default {
         method: "get",
       }).then((response) => {
         this.posts = response.data;
-        console.log(response.data);
       });
     },
     latestReplies(replies) {

@@ -1908,6 +1908,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _helpers_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/http */ "./resources/js/helpers/http.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -1965,6 +1966,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentCard",
   props: {
@@ -1996,17 +1998,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         name: "Rannie Ollit",
         comment_text: this.child_comment_text
       };
-      httpClient({
+      Object(_helpers_http__WEBPACK_IMPORTED_MODULE_0__["default"])({
         url: "/comments",
         method: "post",
         data: _objectSpread({}, originalPayload)
       }).then(function (response) {
-        _this.posts[0].comments.unshift(response.data); // this.posts = response.data;
+        _this.child_comment_text = null; // this.posts[0].comments.unshift(response.data);
+        // this.posts = response.data;
 
-
-        console.log(response.data);
-
-        _this.$emit("send-child-comment", _this.replyBox);
+        _this.$emit("send-child-comment", response.data);
       });
     }
   }
@@ -2182,6 +2182,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -2209,6 +2210,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     showCommentBox: function showCommentBox() {
       this.commentBox = !this.commentBox;
     },
+    sendChildComment: function sendChildComment(comment) {
+      this.fetchPosts();
+    },
     sendComment: function sendComment() {
       var _this = this;
 
@@ -2224,9 +2228,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }).then(function (response) {
         _this.posts[0].comments.unshift(response.data);
 
-        _this.parent_comment_text = null; // this.posts = response.data;
-
-        console.log(response.data);
+        _this.parent_comment_text = null;
       });
     },
     showReplyBox: function showReplyBox(index) {
@@ -2240,7 +2242,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         method: "get"
       }).then(function (response) {
         _this2.posts = response.data;
-        console.log(response.data);
       });
     },
     latestReplies: function latestReplies(replies) {
@@ -56750,7 +56751,8 @@ var render = function() {
                     on: {
                       "reply-box": function($event) {
                         return _vm.showReplyBox(index)
-                      }
+                      },
+                      "send-child-comment": _vm.sendChildComment
                     }
                   }),
                   _vm._v(" "),

@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import httpClient from '../helpers/http'
 export default {
   name: "CommentCard",
   props: {
@@ -84,10 +85,10 @@ export default {
           ...originalPayload,
         },
       }).then((response) => {
-        this.posts[0].comments.unshift(response.data);
+        this.child_comment_text = null
+        // this.posts[0].comments.unshift(response.data);
         // this.posts = response.data;
-        console.log(response.data);
-        this.$emit("send-child-comment", this.replyBox);
+        this.$emit("send-child-comment", response.data);
       });
     }
   },
