@@ -1943,11 +1943,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentCard",
   props: {
     replyBox: {
       type: Boolean
+    },
+    comment: {
+      type: Object
+    },
+    child_comment_text: {
+      type: String
     }
   },
   methods: {
@@ -1955,7 +1978,10 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit("reply-box", this.replyBox);
     },
     sendComment: function sendComment() {
-      this.$emit("send-comment", this.replyBox);
+      this.$emit("send-child-comment", this.replyBox);
+    },
+    changeChildComment: function changeChildComment(comment) {
+      this.$emit("change-child-comment", comment);
     }
   }
 });
@@ -2037,9 +2063,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "ReplyCard"
+  name: "ReplyCard",
+  props: {
+    child: {
+      type: Object
+    }
+  }
 });
 
 /***/ }),
@@ -2055,6 +2085,14 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_CommentCard_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/CommentCard.vue */ "./resources/js/components/CommentCard.vue");
 /* harmony import */ var _components_ReplyCard_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/ReplyCard.vue */ "./resources/js/components/ReplyCard.vue");
+/* harmony import */ var _helpers_http_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/http.js */ "./resources/js/helpers/http.js");
+/* harmony import */ var _helpers_lodash_get__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/lodash-get */ "./resources/js/helpers/lodash-get.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2112,6 +2150,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2123,18 +2171,75 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       commentBox: false,
-      replyBox: false
+      replyBox: false,
+      posts: [],
+      parent_comment_text: null
     };
+  },
+  mounted: function mounted() {
+    this.fetchPosts();
   },
   methods: {
     showCommentBox: function showCommentBox() {
       this.commentBox = !this.commentBox;
     },
-    sendComment: function sendComment() {
-      console.log("sending a comment");
+    sendChildComment: function sendChildComment(parent_id) {
+      var originalPayload = {
+        parent_id: parent_id,
+        post_id: 1,
+        name: "Rannie Ollit",
+        comment_text: this.parent_comment_text
+      };
+      console.log(originalPayload); // httpClient({
+      //   url: "/comments",
+      //   method: "post",
+      //   data: {
+      //     ...originalPayload,
+      //   },
+      // }).then((response) => {
+      //   this.posts[0].comments.unshift(response.data);
+      //   // this.posts = response.data;
+      //   console.log(response.data);
+      // });
     },
-    showReplyBox: function showReplyBox() {
+    sendComment: function sendComment() {
+      var _this = this;
+
+      var originalPayload = {
+        post_id: 1,
+        name: "Rannie Ollit",
+        comment_text: this.parent_comment_text
+      };
+      Object(_helpers_http_js__WEBPACK_IMPORTED_MODULE_2__["default"])({
+        url: "/comments",
+        method: "post",
+        data: _objectSpread({}, originalPayload)
+      }).then(function (response) {
+        _this.posts[0].comments.unshift(response.data);
+
+        _this.parent_comment_text = null; // this.posts = response.data;
+
+        console.log(response.data);
+      });
+    },
+    showReplyBox: function showReplyBox(index) {
       this.replyBox = !this.replyBox;
+    },
+    fetchPosts: function fetchPosts() {
+      var _this2 = this;
+
+      Object(_helpers_http_js__WEBPACK_IMPORTED_MODULE_2__["default"])({
+        url: "/posts",
+        method: "get"
+      }).then(function (response) {
+        _this2.posts = response.data;
+        console.log(response.data);
+      });
+    },
+    latestReplies: function latestReplies(replies) {
+      return Object(_helpers_lodash_get__WEBPACK_IMPORTED_MODULE_3__["default"])(replies) ? replies.length > 3 ? replies.slice(0, 3).map(function (i) {
+        return i;
+      }) : replies : [];
     }
   }
 });
@@ -56280,75 +56385,99 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card-content" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "content" }, [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec\n    iaculis mauris.\n    "
-      ),
-      _c("br"),
-      _vm._v(" "),
-      _c(
-        "time",
-        { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
-        [_vm._v("11:09 PM - 1 Jan 2016")]
-      ),
-      _vm._v(" "),
-      _c(
-        "p",
-        {
-          staticClass: "subtitle is-5 pointer-cursor",
-          on: { click: _vm.showReplyBox }
-        },
-        [_vm._v("Comment")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.replyBox,
-              expression: "replyBox"
-            }
-          ],
-          staticClass: "columns"
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "column" },
-            [
-              _c(
-                "b-field",
-                { attrs: { label: "Add a comment" } },
-                [
-                  _c("b-input", {
-                    attrs: {
-                      maxlength: "200",
-                      type: "textarea",
-                      size: "is-small"
-                    }
-                  })
-                ],
-                1
-              ),
+    _c("div", { staticClass: "columns is-full is-mobile" }, [
+      _c("div", { staticClass: "column is-11 is-offset-1" }, [
+        _c("div", { staticClass: "card-content" }, [
+          _c("div", { staticClass: "media" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "media-content" }, [
+              _c("p", { staticClass: "title is-6" }, [
+                _vm._v(_vm._s(_vm.comment.name))
+              ]),
               _vm._v(" "),
-              _c(
-                "b-button",
-                {
-                  attrs: { type: "is-primary" },
-                  on: { click: _vm.sendComment }
-                },
-                [_vm._v("Comment")]
-              )
-            ],
-            1
-          )
-        ]
-      )
+              _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@rannieo")])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "content" }, [
+            _vm._v(
+              "\n          " + _vm._s(_vm.comment.comment_text) + "\n          "
+            ),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "time",
+              { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
+              [_vm._v(_vm._s(_vm.comment.updated_at))]
+            ),
+            _vm._v(" "),
+            _c(
+              "p",
+              {
+                staticClass: "subtitle is-5 pointer-cursor",
+                on: { click: _vm.showReplyBox }
+              },
+              [_vm._v("\n            Comment\n          ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.replyBox,
+                    expression: "replyBox"
+                  }
+                ],
+                staticClass: "columns"
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "column" },
+                  [
+                    _c(
+                      "b-field",
+                      { attrs: { label: "Add a comment" } },
+                      [
+                        _c("b-input", {
+                          attrs: {
+                            maxlength: "200",
+                            type: "textarea",
+                            size: "is-small"
+                          },
+                          on: { change: _vm.changeChildComment },
+                          model: {
+                            value: _vm.child_comment_text,
+                            callback: function($$v) {
+                              _vm.child_comment_text = $$v
+                            },
+                            expression: "child_comment_text"
+                          }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-button",
+                      {
+                        attrs: { type: "is-primary" },
+                        on: { click: _vm.sendComment }
+                      },
+                      [_vm._v("Comment")]
+                    )
+                  ],
+                  1
+                )
+              ]
+            )
+          ])
+        ])
+      ])
     ])
   ])
 }
@@ -56357,22 +56486,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "media" }, [
-      _c("div", { staticClass: "media-left" }, [
-        _c("figure", { staticClass: "image is-48x48" }, [
-          _c("img", {
-            attrs: {
-              src: "https://bulma.io/images/placeholders/96x96.png",
-              alt: "Placeholder image"
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "media-content" }, [
-        _c("p", { staticClass: "title is-6" }, [_vm._v("John Smith")]),
-        _vm._v(" "),
-        _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@johnsmith")])
+    return _c("div", { staticClass: "media-left" }, [
+      _c("figure", { staticClass: "image is-48x48" }, [
+        _c("img", {
+          attrs: {
+            src: "https://bulma.io/images/placeholders/96x96.png",
+            alt: "Placeholder image"
+          }
+        })
       ])
     ])
   }
@@ -56445,52 +56566,52 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "card-content" }, [
+    _c("div", { staticClass: "columns is-full is-mobile" }, [
+      _c("div", { staticClass: "column is-10 is-offset-2" }, [
+        _c("div", { staticClass: "card-content" }, [
+          _c("div", { staticClass: "media" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "media-content" }, [
+              _c("p", { staticClass: "title is-6" }, [
+                _vm._v(_vm._s(_vm.child.name))
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@rannieo")])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "content" }, [
+            _vm._v(
+              "\n          " + _vm._s(_vm.child.comment_text) + "\n          "
+            ),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "time",
+              { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
+              [_vm._v(_vm._s(_vm.child.updated_at))]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-content" }, [
-      _c("div", { staticClass: "columns is-full is-mobile" }, [
-        _c("div", { staticClass: "column is-10 is-offset-2" }, [
-          _c("div", { staticClass: "card-content" }, [
-            _c("div", { staticClass: "media" }, [
-              _c("div", { staticClass: "media-left" }, [
-                _c("figure", { staticClass: "image is-48x48" }, [
-                  _c("img", {
-                    attrs: {
-                      src: "https://bulma.io/images/placeholders/96x96.png",
-                      alt: "Placeholder image"
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "media-content" }, [
-                _c("p", { staticClass: "title is-6" }, [_vm._v("John Smith")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle is-6" }, [
-                  _vm._v("@johnsmith")
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "content" }, [
-              _vm._v(
-                "\n          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus\n          nec iaculis mauris.\n          "
-              ),
-              _c("br"),
-              _vm._v(" "),
-              _c(
-                "time",
-                { staticClass: "mgb-small", attrs: { datetime: "2016-1-1" } },
-                [_vm._v("11:09 PM - 1 Jan 2016")]
-              )
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "media-left" }, [
+      _c("figure", { staticClass: "image is-48x48" }, [
+        _c("img", {
+          attrs: {
+            src: "https://bulma.io/images/placeholders/96x96.png",
+            alt: "Placeholder image"
+          }
+        })
       ])
     ])
   }
@@ -56517,95 +56638,138 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "columns is-full is-mobile is-centered" }, [
-    _c("div", { staticClass: "column is-6" }, [
-      _c(
-        "div",
-        { staticClass: "card" },
-        [
-          _c("div", { staticClass: "card-content" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "content" }, [
-              _vm._v(
-                "\n          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus\n          nec iaculis mauris.\n          "
-              ),
-              _c("br"),
-              _vm._v(" "),
-              _c("time", { attrs: { datetime: "2016-1-1" } }, [
-                _vm._v("11:09 PM - 1 Jan 2016")
+    _c(
+      "div",
+      { staticClass: "column is-6" },
+      _vm._l(_vm.posts, function(post) {
+        return _c(
+          "div",
+          { key: post.id, staticClass: "card" },
+          [
+            _c("div", { staticClass: "card-content" }, [
+              _c("div", { staticClass: "media" }, [
+                _vm._m(0, true),
+                _vm._v(" "),
+                _c("div", { staticClass: "media-content" }, [
+                  _c("p", { staticClass: "title is-4" }, [
+                    _vm._v(_vm._s(post.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle is-6" }, [
+                    _vm._v("@rannieo")
+                  ])
+                ])
               ]),
               _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "subtitle is-5 pointer-cursor",
-                  on: { click: _vm.showCommentBox }
-                },
-                [_vm._v("\n            Comment\n          ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.commentBox,
-                      expression: "commentBox"
-                    }
-                  ],
-                  staticClass: "columns"
-                },
-                [
-                  _c(
-                    "div",
-                    { staticClass: "column" },
-                    [
-                      _c(
-                        "b-field",
-                        { attrs: { label: "Add a comment" } },
-                        [
-                          _c("b-input", {
-                            attrs: {
-                              maxlength: "200",
-                              type: "textarea",
-                              size: "is-small"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-button",
-                        {
-                          attrs: { type: "is-primary" },
-                          on: { click: _vm.sendComment }
-                        },
-                        [_vm._v("Comment")]
-                      )
+              _c("div", { staticClass: "content" }, [
+                _vm._v("\n          " + _vm._s(post.title) + "\n          "),
+                _c("br"),
+                _vm._v(" "),
+                _c("time", { attrs: { datetime: "2016-1-1" } }, [
+                  _vm._v(_vm._s(post.updated_at))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  {
+                    staticClass: "subtitle is-5 pointer-cursor",
+                    on: { click: _vm.showCommentBox }
+                  },
+                  [_vm._v("\n            Comment\n          ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.commentBox,
+                        expression: "commentBox"
+                      }
                     ],
-                    1
-                  )
-                ]
+                    staticClass: "columns"
+                  },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "column" },
+                      [
+                        _c(
+                          "b-field",
+                          { attrs: { label: "Add a comment" } },
+                          [
+                            _c("b-input", {
+                              attrs: {
+                                maxlength: "200",
+                                type: "textarea",
+                                size: "is-small"
+                              },
+                              model: {
+                                value: _vm.parent_comment_text,
+                                callback: function($$v) {
+                                  _vm.parent_comment_text = $$v
+                                },
+                                expression: "parent_comment_text"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-button",
+                          {
+                            attrs: { type: "is-primary" },
+                            on: { click: _vm.sendComment }
+                          },
+                          [_vm._v("Comment")]
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._l(post.comments, function(comment, index) {
+              return _c(
+                "div",
+                { key: index },
+                [
+                  _c("comment-card", {
+                    attrs: { replyBox: _vm.replyBox, comment: comment },
+                    on: {
+                      "reply-box": function($event) {
+                        return _vm.showReplyBox(index)
+                      },
+                      "send-child-comment": function($event) {
+                        return _vm.sendChildComment(comment.id)
+                      },
+                      "change-child-comment": function($event) {
+                        return _vm.changeChildComment(_vm.text)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._l(comment.children, function(child, index) {
+                    return _c("reply-card", {
+                      key: index,
+                      attrs: { child: child }
+                    })
+                  })
+                ],
+                2
               )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("comment-card", {
-            attrs: { replyBox: _vm.replyBox },
-            on: {
-              "reply-box": _vm.showReplyBox,
-              "send-comment": _vm.sendComment
-            }
-          }),
-          _vm._v(" "),
-          _c("reply-card")
-        ],
-        1
-      )
-    ])
+            })
+          ],
+          2
+        )
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = [
@@ -56613,22 +56777,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "media" }, [
-      _c("div", { staticClass: "media-left" }, [
-        _c("figure", { staticClass: "image is-48x48" }, [
-          _c("img", {
-            attrs: {
-              src: "https://bulma.io/images/placeholders/96x96.png",
-              alt: "Placeholder image"
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "media-content" }, [
-        _c("p", { staticClass: "title is-4" }, [_vm._v("John Smith")]),
-        _vm._v(" "),
-        _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@johnsmith")])
+    return _c("div", { staticClass: "media-left" }, [
+      _c("figure", { staticClass: "image is-48x48" }, [
+        _c("img", {
+          attrs: {
+            src: "https://bulma.io/images/placeholders/96x96.png",
+            alt: "Placeholder image"
+          }
+        })
       ])
     ])
   }
@@ -69113,6 +69269,58 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyCard_vue_vue_type_template_id_902deb82_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/helpers/http.js":
+/*!**************************************!*\
+  !*** ./resources/js/helpers/http.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var httpClient = function httpClient(params) {
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.request(_objectSpread(_objectSpread({}, params), {}, {
+    baseURL: process.env.BASE_URL || 'http://localhost:8000/api/'
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (httpClient);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./resources/js/helpers/lodash-get.js":
+/*!********************************************!*\
+  !*** ./resources/js/helpers/lodash-get.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var _get = function _get(object, path) {
+  if (typeof path === "string") path = path.split(".").filter(function (key) {
+    return key.length;
+  });
+  return path.reduce(function (dive, key) {
+    return dive && dive[key];
+  }, object);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (_get);
 
 /***/ }),
 
