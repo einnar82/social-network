@@ -2251,6 +2251,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.posts[0].comments.unshift(mutatedComment);
 
         _this.parent_comment_text = null;
+        _this.commentBox = !_this.commentBox;
       });
     },
     showReplyBox: function showReplyBox(index) {

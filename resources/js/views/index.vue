@@ -113,6 +113,7 @@ export default {
         };
         this.posts[0].comments.unshift(mutatedComment);
         this.parent_comment_text = null;
+        this.commentBox = !this.commentBox;
       });
     },
     showReplyBox(index) {
