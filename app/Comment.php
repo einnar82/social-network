@@ -15,8 +15,14 @@ class Comment extends Model
         return $this->belongsTo(Post::class);
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id')->latest();
+    }
+
     public function children()
     {
-        return $this->hasMany(self::class, 'parent_id')->latest()->take(3);
+        return $this->hasMany(self::class, 'parent_id')->whereNotNull('parent_id')->latest();
     }
+
 }

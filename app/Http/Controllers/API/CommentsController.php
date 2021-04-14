@@ -17,6 +17,6 @@ class CommentsController extends Controller
 
     public function getComments(Request $request)
     {
-        return Post::with(['comments.children'])->get();
+        return Post::with(['comments.children'])->latest()->take(3)->get();
     }
 }
