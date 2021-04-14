@@ -23,15 +23,23 @@
             nec iaculis mauris.
             <br />
             <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-
-            <b-field label="Add a comment">
-              <b-input
-                maxlength="200"
-                type="textarea"
-                size="is-small"
-              ></b-input>
-            </b-field>
-            <b-button type="is-primary">Comment</b-button>
+            <p class="subtitle is-5 pointer-cursor" @click="showCommentBox">
+              Comment
+            </p>
+            <div class="columns" v-show="commentBox">
+              <div class="column">
+                <b-field label="Add a comment">
+                  <b-input
+                    maxlength="200"
+                    type="textarea"
+                    size="is-small"
+                  ></b-input>
+                </b-field>
+                <b-button type="is-primary" @click="sendComment"
+                  >Comment</b-button
+                >
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -110,8 +118,22 @@
 <script>
 export default {
   name: "index",
+  data: () => ({
+    commentBox: false,
+  }),
+  methods: {
+    showCommentBox() {
+      this.commentBox = !this.commentBox;
+    },
+    sendComment() {
+      console.log("sending a comment");
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+.pointer-cursor {
+  cursor: pointer;
+}
 </style>
