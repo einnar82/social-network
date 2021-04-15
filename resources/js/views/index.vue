@@ -1,7 +1,7 @@
 <template>
-  <div class="columns is-full is-centered">
+  <div class="columns is-full is-centered pt-6">
     <div class="column is-6">
-      <div class="card shadow-override" v-for="post in posts" :key="post.id">
+      <div class="card shadow-override bg-override" v-for="post in posts" :key="post.id">
         <div class="card-content card-shade">
           <div class="media">
             <div class="media-left">
@@ -156,13 +156,18 @@ export default {
 }
 
 .card-shade {
-  background-color: #ced6e0;
+  // background-color: #ced6e0;
+  background-color: #ffff;
   border: 2px;
-  border-radius: 26px;
+  // border-radius: 26px;
 }
 
 .shadow-override {
   box-shadow: none;
   border: 0px;
+}
+
+.bg-override {
+  background-color: #4bcffa
 }
 </style>

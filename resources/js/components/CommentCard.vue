@@ -103,6 +103,6 @@ export default {
 .card-shade {
   background-color: #dfe6e9;
   border: 2px;
-  border-radius: 26px;
+  // border-radius: 26px;
 }
 </style>

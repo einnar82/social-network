@@ -50,8 +50,8 @@ export default {
 }
 
 .card-shade {
-  background-color: #f1f2f6;
+  background-color: #dfe6e9;
   border: 2px;
-  border-radius: 26px;
+  // border-radius: 26px;
 }
 </style>

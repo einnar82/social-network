@@ -8,8 +8,6 @@ class Comment extends Model
 {
     protected $guarded = ['id'];
 
-    protected $touches = ['post'];
-
     public function post()
     {
         return $this->belongsTo(Post::class);
