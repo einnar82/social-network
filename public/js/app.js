@@ -1995,7 +1995,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var originalPayload = {
         parent_id: this.comment.id,
         post_id: 1,
-        name: "Rannie Ollit",
+        name: "Bamboo Mañalac",
         comment_text: this.child_comment_text
       };
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_0__["default"])({
@@ -2236,7 +2236,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var originalPayload = {
         post_id: 1,
-        name: "Rannie Ollit",
+        name: "Bamboo Mañalac",
         comment_text: this.parent_comment_text
       };
       Object(_helpers_http_js__WEBPACK_IMPORTED_MODULE_2__["default"])({
@@ -56831,7 +56831,9 @@ var render = function() {
                 _vm._v(_vm._s(_vm.comment.name))
               ]),
               _vm._v(" "),
-              _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@rannieo")])
+              _c("p", { staticClass: "subtitle is-6" }, [
+                _vm._v("@BambooMusicLive")
+              ])
             ])
           ]),
           _vm._v(" "),
@@ -56924,10 +56926,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "media-left" }, [
       _c("figure", { staticClass: "image is-48x48" }, [
         _c("img", {
-          attrs: {
-            src: "https://bulma.io/images/placeholders/96x96.png",
-            alt: "Placeholder image"
-          }
+          attrs: { src: "/images/bamboo.jpg", alt: "Placeholder image" }
         })
       ])
     ])
@@ -57013,7 +57012,9 @@ var render = function() {
                 _vm._v(_vm._s(_vm.child.name))
               ]),
               _vm._v(" "),
-              _c("p", { staticClass: "subtitle is-6" }, [_vm._v("@rannieo")])
+              _c("p", { staticClass: "subtitle is-6" }, [
+                _vm._v("@BambooMusicLive")
+              ])
             ])
           ]),
           _vm._v(" "),
@@ -57042,10 +57043,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "media-left" }, [
       _c("figure", { staticClass: "image is-48x48" }, [
         _c("img", {
-          attrs: {
-            src: "https://bulma.io/images/placeholders/96x96.png",
-            alt: "Placeholder image"
-          }
+          attrs: { src: "/images/bamboo.jpg", alt: "Placeholder image" }
         })
       ])
     ])
@@ -57091,7 +57089,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("p", { staticClass: "subtitle is-6" }, [
-                    _vm._v("@rannieo")
+                    _vm._v("@BambooMusicLive")
                   ])
                 ])
               ]),
@@ -57214,10 +57212,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "media-left" }, [
       _c("figure", { staticClass: "image is-48x48" }, [
         _c("img", {
-          attrs: {
-            src: "https://bulma.io/images/placeholders/96x96.png",
-            alt: "Placeholder image"
-          }
+          attrs: { src: "/images/bamboo.jpg", alt: "Placeholder image" }
         })
       ])
     ])

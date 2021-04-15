@@ -13,8 +13,8 @@ class PostSeeder extends Seeder
     public function run()
     {
         Post::create([
-            'title' => 'This is a test post!',
-            'name' => 'Rannie Ollit'
+            'title' => 'Tingnan mo iyong palad',
+            'name' => 'Bamboo Mañalac'
         ]);
     }
 }

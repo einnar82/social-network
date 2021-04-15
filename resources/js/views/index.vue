@@ -7,14 +7,14 @@
             <div class="media-left">
               <figure class="image is-48x48">
                 <img
-                  src="https://bulma.io/images/placeholders/96x96.png"
+                  src="/images/bamboo.jpg"
                   alt="Placeholder image"
                 />
               </figure>
             </div>
             <div class="media-content">
               <p class="title is-4 has-text-weight-bold">{{ post.name }}</p>
-              <p class="subtitle is-6">@rannieo</p>
+              <p class="subtitle is-6">@BambooMusicLive</p>
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export default {
     sendComment() {
       const originalPayload = {
         post_id: 1,
-        name: "Rannie Ollit",
+        name: "Bamboo Mañalac",
         comment_text: this.parent_comment_text,
       };
 
