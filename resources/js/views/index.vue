@@ -1,5 +1,5 @@
 <template>
-  <div class="columns is-full is-mobile is-centered">
+  <div class="columns is-full is-centered">
     <div class="column is-6">
       <div class="card shadow-override" v-for="post in posts" :key="post.id">
         <div class="card-content card-shade">
