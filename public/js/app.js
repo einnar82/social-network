@@ -69746,7 +69746,8 @@ var mixin = {
   methods: {
     ago: function ago(time) {
       return Object(timeago_js__WEBPACK_IMPORTED_MODULE_0__["format"])(time);
-    }
+    },
+    sendComment: function sendComment() {}
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (mixin);

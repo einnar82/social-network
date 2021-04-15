@@ -3,7 +3,8 @@ const mixin = {
     methods: {
         ago(time) {
             return format(time)
-        }
+        },
+        sendComment() {}
     }
 }
 
