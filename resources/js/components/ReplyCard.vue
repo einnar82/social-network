@@ -13,7 +13,7 @@
               </figure>
             </div>
             <div class="media-content">
-              <p class="title is-6">{{ child.name }}</p>
+              <p class="title is-6 has-text-weight-bold">{{ child.name }}</p>
               <p class="subtitle is-6">@rannieo</p>
             </div>
           </div>

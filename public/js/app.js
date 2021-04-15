@@ -56827,7 +56827,7 @@ var render = function() {
             _vm._m(0),
             _vm._v(" "),
             _c("div", { staticClass: "media-content" }, [
-              _c("p", { staticClass: "title is-6" }, [
+              _c("p", { staticClass: "title is-6 has-text-weight-bold" }, [
                 _vm._v(_vm._s(_vm.comment.name))
               ]),
               _vm._v(" "),
@@ -57009,7 +57009,7 @@ var render = function() {
             _vm._m(0),
             _vm._v(" "),
             _c("div", { staticClass: "media-content" }, [
-              _c("p", { staticClass: "title is-6" }, [
+              _c("p", { staticClass: "title is-6 has-text-weight-bold" }, [
                 _vm._v(_vm._s(_vm.child.name))
               ]),
               _vm._v(" "),
@@ -57086,7 +57086,7 @@ var render = function() {
                 _vm._m(0, true),
                 _vm._v(" "),
                 _c("div", { staticClass: "media-content" }, [
-                  _c("p", { staticClass: "title is-4" }, [
+                  _c("p", { staticClass: "title is-4 has-text-weight-bold" }, [
                     _vm._v(_vm._s(post.name))
                   ]),
                   _vm._v(" "),
