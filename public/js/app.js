@@ -2200,7 +2200,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -57173,15 +57172,22 @@ var render = function() {
                 "div",
                 { key: index },
                 [
-                  _c("comment-card", {
-                    attrs: { replyBox: comment.enable, comment: comment },
-                    on: {
-                      "reply-box": function($event) {
-                        return _vm.showReplyBox(index)
+                  _c(
+                    "comment-card",
+                    _vm._b(
+                      {
+                        on: {
+                          "reply-box": function($event) {
+                            return _vm.showReplyBox(index)
+                          },
+                          "send-child-comment": _vm.sendChildComment
+                        }
                       },
-                      "send-child-comment": _vm.sendChildComment
-                    }
-                  }),
+                      "comment-card",
+                      { comment: comment, replyBox: comment.enable },
+                      false
+                    )
+                  ),
                   _vm._v(" "),
                   _vm._l(_vm.latestReplies(comment.children), function(
                     child,

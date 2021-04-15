@@ -49,9 +49,8 @@
         <div v-for="(comment, index) in post.comments" :key="index">
           <comment-card
             @reply-box="showReplyBox(index)"
-            :replyBox="comment.enable"
-            :comment="comment"
             @send-child-comment="sendChildComment"
+            v-bind="{comment: comment, replyBox: comment.enable}"
           />
           <!--reply-->
           <reply-card
