@@ -20,4 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('comments', 'API\CommentsController@addComment');
 Route::get('comments', 'API\CommentsController@getComments');
-Route::get('posts', 'API\PostsController@getAllPosts');
+Route::get('comments/{id}', 'API\CommentsController@getChildComments');

@@ -6,10 +6,7 @@
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
-                <img
-                  src="/images/bamboo.jpg"
-                  alt="Placeholder image"
-                />
+                <img src="/images/bamboo.jpg" alt="Placeholder image" />
               </figure>
             </div>
             <div class="media-content">
@@ -24,9 +21,22 @@
             <time datetime="2016-1-1" class="mgb-small">{{
               ago(comment.updated_at)
             }}</time>
-            <p class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold" @click="showReplyBox">
-              Reply
-            </p>
+
+            <div class="comments-tab">
+              <p
+                class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3"
+                @click="viewReplies(comment)"
+              >
+                View Replies
+              </p>
+              <p
+                class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold"
+                @click="showReplyBox"
+              >
+                Reply
+              </p>
+            </div>
+
             <div class="columns" v-show="replyBox">
               <div class="column">
                 <b-field label="Add a comment">
@@ -51,7 +61,7 @@
 
 <script>
 import httpClient from "../helpers/http";
-import mixin from '../mixins';
+import mixin from "../mixins";
 
 export default {
   mixins: [mixin],
@@ -70,6 +80,9 @@ export default {
   methods: {
     showReplyBox() {
       this.$emit("reply-box", this.replyBox);
+    },
+    viewReplies(comment) {
+      this.$emit("view-replies", comment);
     },
     sendComment() {
       const originalPayload = {
@@ -104,5 +117,9 @@ export default {
   background-color: #dfe6e9;
   border: 2px;
   // border-radius: 26px;
+}
+
+.comments-tab {
+  display: flex;
 }
 </style>

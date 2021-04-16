@@ -1,15 +1,16 @@
 <template>
   <div class="columns is-full is-centered pt-6">
     <div class="column is-6">
-      <div class="card shadow-override bg-override" v-for="post in posts" :key="post.id">
+      <div
+        class="card shadow-override bg-override"
+        v-for="(post, index) in posts"
+        :key="index"
+      >
         <div class="card-content card-shade">
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
-                <img
-                  src="/images/bamboo.jpg"
-                  alt="Placeholder image"
-                />
+                <img src="/images/bamboo.jpg" alt="Placeholder image" />
               </figure>
             </div>
             <div class="media-content">
@@ -22,12 +23,20 @@
             {{ post.title }}
             <br />
             <time datetime="2016-1-1">{{ ago(post.updated_at) }}</time>
-            <p
-              class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold"
-              @click="showCommentBox"
-            >
-              Comment
-            </p>
+            <div class="comments-tab">
+              <p
+                class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3"
+                @click="showMoreComments"
+              >
+                View Comments
+              </p>
+              <p
+                class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold"
+                @click="showCommentBox"
+              >
+                Add Comment
+              </p>
+            </div>
             <div class="columns" v-show="commentBox">
               <div class="column">
                 <b-field label="Add a comment">
@@ -50,11 +59,12 @@
           <comment-card
             @reply-box="showReplyBox(index)"
             @send-child-comment="sendChildComment"
-            v-bind="{comment: comment, replyBox: comment.enable}"
+            @view-replies="viewReplies"
+            v-bind="{ comment: comment, replyBox: comment.enable }"
           />
           <!--reply-->
           <reply-card
-            v-for="(child, index) in latestReplies(comment.children)"
+            v-for="(child, index) in comment.children"
             :key="index"
             :child="child"
           />
@@ -80,17 +90,77 @@ export default {
         comments: [],
       },
     ],
+    details: {},
     parent_comment_text: null,
   }),
   mounted() {
     this.fetchPosts();
   },
   methods: {
+    viewReplies(comment) {
+      httpClient({
+        url: `/comments/${comment.id}`,
+        method: "get",
+      }).then((response) => {
+        const { data, ...otherDetails } = response;
+        const parentComment = this.posts[0].comments.find((item) => {
+          return item.id === comment.id;
+        });
+
+        const updatedComment = Object.assign(parentComment, {
+          ...parentComment,
+          children: data,
+        })
+
+        console.log("updatedComment", updatedComment)
+      });
+    },
     showCommentBox() {
       this.commentBox = !this.commentBox;
     },
+
     sendChildComment(comment) {
-      this.fetchPosts();
+      const parentId = comment.parent_id;
+      const parentComment = this.posts[0].comments.find((item) => {
+        return item.id === parentId;
+      });
+
+      parentComment.children.unshift(comment);
+
+      const updatedPost = [
+        {
+          name: "Bamboo Mañalac",
+          title: "Tignan mo ang iyong palad",
+          updated_at: new Date(),
+          comments: [...this.posts[0].comments, { ...parentComment }],
+        },
+      ];
+      console.log("updatedPost", updatedPost);
+    },
+    showMoreComments() {
+      httpClient({
+        url: this.details.next_page_url,
+        method: "get",
+      }).then((response) => {
+        console.log("other comments", response.data);
+        const { data, ...otherDetails } = response.data;
+        const latestComments = data.map((comment) => {
+          return {
+            ...comment,
+            enable: false,
+            children: [],
+          };
+        });
+        this.posts = [
+          {
+            name: "Bamboo Mañalac",
+            title: "Tignan mo ang iyong palad",
+            updated_at: new Date(),
+            comments: this.posts[0].comments.concat(latestComments),
+          },
+        ];
+        this.details = otherDetails;
+      });
     },
     sendComment() {
       const originalPayload = {
@@ -109,6 +179,7 @@ export default {
         const mutatedComment = {
           ...response.data,
           enable: false,
+          children: [],
         };
         this.posts[0].comments.unshift(mutatedComment);
         this.parent_comment_text = null;
@@ -121,22 +192,26 @@ export default {
     },
     fetchPosts() {
       httpClient({
-        url: "/posts",
+        url: "/comments",
         method: "get",
       }).then((response) => {
-        const post = response.data[0];
-        const mutatedComments = response.data[0].comments.map((comment) => {
+        const { data, ...otherDetails } = response.data;
+        const latestComments = data.map((comment) => {
           return {
             ...comment,
             enable: false,
+            children: [],
           };
         });
         this.posts = [
           {
-            ...post,
-            comments: [...mutatedComments],
+            name: "Bamboo Mañalac",
+            title: "Tignan mo ang iyong palad",
+            updated_at: new Date(),
+            comments: [...latestComments],
           },
         ];
+        this.details = otherDetails;
       });
     },
     latestReplies(replies) {
@@ -168,6 +243,10 @@ export default {
 }
 
 .bg-override {
-  background-color: #4bcffa
+  background-color: #4bcffa;
+}
+
+.comments-tab {
+  display: flex;
 }
 </style>

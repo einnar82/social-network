@@ -1967,6 +1967,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1988,6 +1998,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     showReplyBox: function showReplyBox() {
       this.$emit("reply-box", this.replyBox);
+    },
+    viewReplies: function viewReplies(comment) {
+      this.$emit("view-replies", comment);
     },
     sendComment: function sendComment() {
       var _this = this;
@@ -2134,6 +2147,20 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2217,6 +2244,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       posts: [{
         comments: []
       }],
+      details: {},
       parent_comment_text: null
     };
   },
@@ -2224,14 +2252,73 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.fetchPosts();
   },
   methods: {
+    viewReplies: function viewReplies(comment) {
+      var _this = this;
+
+      Object(_helpers_http_js__WEBPACK_IMPORTED_MODULE_2__["default"])({
+        url: "/comments/".concat(comment.id),
+        method: "get"
+      }).then(function (response) {
+        var data = response.data,
+            otherDetails = _objectWithoutProperties(response, ["data"]);
+
+        var parentComment = _this.posts[0].comments.find(function (item) {
+          return item.id === comment.id;
+        });
+
+        var updatedComment = Object.assign(parentComment, _objectSpread(_objectSpread({}, parentComment), {}, {
+          children: data
+        }));
+        console.log("updatedComment", updatedComment);
+      });
+    },
     showCommentBox: function showCommentBox() {
       this.commentBox = !this.commentBox;
     },
     sendChildComment: function sendChildComment(comment) {
-      this.fetchPosts();
+      var parentId = comment.parent_id;
+      var parentComment = this.posts[0].comments.find(function (item) {
+        return item.id === parentId;
+      });
+      parentComment.children.unshift(comment);
+      var updatedPost = [{
+        name: "Bamboo Mañalac",
+        title: "Tignan mo ang iyong palad",
+        updated_at: new Date(),
+        comments: [].concat(_toConsumableArray(this.posts[0].comments), [_objectSpread({}, parentComment)])
+      }];
+      console.log("updatedPost", updatedPost);
+    },
+    showMoreComments: function showMoreComments() {
+      var _this2 = this;
+
+      Object(_helpers_http_js__WEBPACK_IMPORTED_MODULE_2__["default"])({
+        url: this.details.next_page_url,
+        method: "get"
+      }).then(function (response) {
+        console.log("other comments", response.data);
+
+        var _response$data = response.data,
+            data = _response$data.data,
+            otherDetails = _objectWithoutProperties(_response$data, ["data"]);
+
+        var latestComments = data.map(function (comment) {
+          return _objectSpread(_objectSpread({}, comment), {}, {
+            enable: false,
+            children: []
+          });
+        });
+        _this2.posts = [{
+          name: "Bamboo Mañalac",
+          title: "Tignan mo ang iyong palad",
+          updated_at: new Date(),
+          comments: _this2.posts[0].comments.concat(latestComments)
+        }];
+        _this2.details = otherDetails;
+      });
     },
     sendComment: function sendComment() {
-      var _this = this;
+      var _this3 = this;
 
       var originalPayload = {
         post_id: 1,
@@ -2244,34 +2331,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         data: _objectSpread({}, originalPayload)
       }).then(function (response) {
         var mutatedComment = _objectSpread(_objectSpread({}, response.data), {}, {
-          enable: false
+          enable: false,
+          children: []
         });
 
-        _this.posts[0].comments.unshift(mutatedComment);
+        _this3.posts[0].comments.unshift(mutatedComment);
 
-        _this.parent_comment_text = null;
-        _this.commentBox = !_this.commentBox;
+        _this3.parent_comment_text = null;
+        _this3.commentBox = !_this3.commentBox;
       });
     },
     showReplyBox: function showReplyBox(index) {
       this.posts[0].comments[index].enable = !this.posts[0].comments[index].enable;
     },
     fetchPosts: function fetchPosts() {
-      var _this2 = this;
+      var _this4 = this;
 
       Object(_helpers_http_js__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        url: "/posts",
+        url: "/comments",
         method: "get"
       }).then(function (response) {
-        var post = response.data[0];
-        var mutatedComments = response.data[0].comments.map(function (comment) {
+        var _response$data2 = response.data,
+            data = _response$data2.data,
+            otherDetails = _objectWithoutProperties(_response$data2, ["data"]);
+
+        var latestComments = data.map(function (comment) {
           return _objectSpread(_objectSpread({}, comment), {}, {
-            enable: false
+            enable: false,
+            children: []
           });
         });
-        _this2.posts = [_objectSpread(_objectSpread({}, post), {}, {
-          comments: _toConsumableArray(mutatedComments)
-        })];
+        _this4.posts = [{
+          name: "Bamboo Mañalac",
+          title: "Tignan mo ang iyong palad",
+          updated_at: new Date(),
+          comments: _toConsumableArray(latestComments)
+        }];
+        _this4.details = otherDetails;
       });
     },
     latestReplies: function latestReplies(replies) {
@@ -24453,7 +24549,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".pointer-cursor[data-v-5634f174] {\n  cursor: pointer;\n}\n.card-shade[data-v-5634f174] {\n  background-color: #dfe6e9;\n  border: 2px;\n}", ""]);
+exports.push([module.i, ".pointer-cursor[data-v-5634f174] {\n  cursor: pointer;\n}\n.card-shade[data-v-5634f174] {\n  background-color: #dfe6e9;\n  border: 2px;\n}\n.comments-tab[data-v-5634f174] {\n  display: flex;\n}", ""]);
 
 // exports
 
@@ -24491,7 +24587,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".pointer-cursor[data-v-5c49133a] {\n  cursor: pointer;\n}\n.card-shade[data-v-5c49133a] {\n  background-color: #ffff;\n  border: 2px;\n}\n.shadow-override[data-v-5c49133a] {\n  box-shadow: none;\n  border: 0px;\n}\n.bg-override[data-v-5c49133a] {\n  background-color: #4bcffa;\n}", ""]);
+exports.push([module.i, ".pointer-cursor[data-v-5c49133a] {\n  cursor: pointer;\n}\n.card-shade[data-v-5c49133a] {\n  background-color: #ffff;\n  border: 2px;\n}\n.shadow-override[data-v-5c49133a] {\n  box-shadow: none;\n  border: 0px;\n}\n.bg-override[data-v-5c49133a] {\n  background-color: #4bcffa;\n}\n.comments-tab[data-v-5c49133a] {\n  display: flex;\n}", ""]);
 
 // exports
 
@@ -56848,15 +56944,31 @@ var render = function() {
               [_vm._v(_vm._s(_vm.ago(_vm.comment.updated_at)))]
             ),
             _vm._v(" "),
-            _c(
-              "p",
-              {
-                staticClass:
-                  "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
-                on: { click: _vm.showReplyBox }
-              },
-              [_vm._v("\n            Reply\n          ")]
-            ),
+            _c("div", { staticClass: "comments-tab" }, [
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3",
+                  on: {
+                    click: function($event) {
+                      return _vm.viewReplies(_vm.comment)
+                    }
+                  }
+                },
+                [_vm._v("\n              View Replies\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
+                  on: { click: _vm.showReplyBox }
+                },
+                [_vm._v("\n              Reply\n            ")]
+              )
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -57073,10 +57185,10 @@ var render = function() {
     _c(
       "div",
       { staticClass: "column is-6" },
-      _vm._l(_vm.posts, function(post) {
+      _vm._l(_vm.posts, function(post, index) {
         return _c(
           "div",
-          { key: post.id, staticClass: "card shadow-override bg-override" },
+          { key: index, staticClass: "card shadow-override bg-override" },
           [
             _c("div", { staticClass: "card-content card-shade" }, [
               _c("div", { staticClass: "media" }, [
@@ -57101,15 +57213,27 @@ var render = function() {
                   _vm._v(_vm._s(_vm.ago(post.updated_at)))
                 ]),
                 _vm._v(" "),
-                _c(
-                  "p",
-                  {
-                    staticClass:
-                      "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
-                    on: { click: _vm.showCommentBox }
-                  },
-                  [_vm._v("\n            Comment\n          ")]
-                ),
+                _c("div", { staticClass: "comments-tab" }, [
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3",
+                      on: { click: _vm.showMoreComments }
+                    },
+                    [_vm._v("\n              View Comments\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
+                      on: { click: _vm.showCommentBox }
+                    },
+                    [_vm._v("\n              Add Comment\n            ")]
+                  )
+                ]),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -57180,7 +57304,8 @@ var render = function() {
                           "reply-box": function($event) {
                             return _vm.showReplyBox(index)
                           },
-                          "send-child-comment": _vm.sendChildComment
+                          "send-child-comment": _vm.sendChildComment,
+                          "view-replies": _vm.viewReplies
                         }
                       },
                       "comment-card",
@@ -57189,10 +57314,7 @@ var render = function() {
                     )
                   ),
                   _vm._v(" "),
-                  _vm._l(_vm.latestReplies(comment.children), function(
-                    child,
-                    index
-                  ) {
+                  _vm._l(comment.children, function(child, index) {
                     return _c("reply-card", {
                       key: index,
                       attrs: { child: child }

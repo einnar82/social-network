@@ -17,6 +17,11 @@ class CommentsController extends Controller
 
     public function getComments(Request $request)
     {
-        return Post::with(['comments.children'])->latest()->get();
+        return Comment::whereNull('parent_id')->latest()->paginate(3);
+    }
+
+    public function getChildComments($id)
+    {
+        return Comment::findOrFail($id)->children()->limit(3)->get();
     }
 }

@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <div id="app" style="background-color:#4bcffa">
+<body style="background-color:#4bcffa;height:100vh">
+    <div id="app">
         <index />
     </div>
 </body>
