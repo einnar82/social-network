@@ -2280,13 +2280,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
         return item.id === parentId;
       });
       parentComment.children.unshift(comment);
-      var updatedPost = [{
-        name: "Bamboo Mañalac",
-        title: "Tignan mo ang iyong palad",
-        updated_at: new Date(),
-        comments: [].concat(_toConsumableArray(this.posts[0].comments), [_objectSpread({}, parentComment)])
-      }];
-      console.log("updatedPost", updatedPost);
+      parentComment.enable = !parentComment.enable;
     },
     showMoreComments: function showMoreComments() {
       var _this2 = this;

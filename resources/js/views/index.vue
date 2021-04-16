@@ -126,16 +126,7 @@ export default {
       });
 
       parentComment.children.unshift(comment);
-
-      const updatedPost = [
-        {
-          name: "Bamboo Mañalac",
-          title: "Tignan mo ang iyong palad",
-          updated_at: new Date(),
-          comments: [...this.posts[0].comments, { ...parentComment }],
-        },
-      ];
-      console.log("updatedPost", updatedPost);
+      parentComment.enable = !parentComment.enable;
     },
     showMoreComments() {
       httpClient({
