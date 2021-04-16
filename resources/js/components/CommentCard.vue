@@ -87,7 +87,6 @@ export default {
     sendComment() {
       const originalPayload = {
         parent_id: this.comment.id,
-        post_id: 1,
         name: "Bamboo Mañalac",
         comment_text: this.child_comment_text,
       };

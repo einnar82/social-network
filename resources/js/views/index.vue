@@ -164,7 +164,6 @@ export default {
     },
     sendComment() {
       const originalPayload = {
-        post_id: 1,
         name: "Bamboo Mañalac",
         comment_text: this.parent_comment_text,
       };

@@ -2007,7 +2007,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var originalPayload = {
         parent_id: this.comment.id,
-        post_id: 1,
         name: "Bamboo Mañalac",
         comment_text: this.child_comment_text
       };
@@ -2321,7 +2320,6 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
       var _this3 = this;
 
       var originalPayload = {
-        post_id: 1,
         name: "Bamboo Mañalac",
         comment_text: this.parent_comment_text
       };

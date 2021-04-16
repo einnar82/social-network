@@ -25,7 +25,6 @@ class AddCommentRequest extends FormRequest
     {
         return [
             'parent_id' => 'sometimes|required|integer',
-            'post_id' => 'required|integer',
             'name' => 'required|string',
             'comment_text' => 'required|string'
         ];
