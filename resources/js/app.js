@@ -51,8 +51,9 @@ const store = new Vuex.Store({
             state.comments[objIndex].enable = !state.comments[objIndex].enable
         },
         ENABLE_GRANDCHILD_COMMENT_BOX: (state, grandChildComment) => {
+            console.log("grandChildComment", grandChildComment)
             let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
-            state.comments[objIndex].enable = !state.comments[objIndex].enable
+            state.comments[objIndex].children
         }
     },
     getters: {

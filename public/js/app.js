@@ -71672,10 +71672,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       state.comments[objIndex].enable = !state.comments[objIndex].enable;
     },
     ENABLE_GRANDCHILD_COMMENT_BOX: function ENABLE_GRANDCHILD_COMMENT_BOX(state, grandChildComment) {
+      console.log("grandChildComment", grandChildComment);
       var objIndex = state.comments.findIndex(function (obj) {
         return obj.id == parentComment.id;
       });
-      state.comments[objIndex].enable = !state.comments[objIndex].enable;
+      state.comments[objIndex].children;
     }
   },
   getters: {
