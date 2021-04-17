@@ -36,6 +36,11 @@ class CommentsController extends Controller
 
     public function getChildComments($id)
     {
-        return CommentResource::collection(Comment::findOrFail($id)->children()->get());
+        return CommentResource::collection(Comment::findOrFail($id)->children);
+    }
+
+    public function getGrandChildComments($id)
+    {
+        return CommentResource::collection(Comment::findOrFail($id)->grand_children);
     }
 }
