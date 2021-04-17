@@ -10,16 +10,16 @@
               </figure>
             </div>
             <div class="media-content">
-              <p :class="nameClass">Bamboo Manalac</p>
-              <p :class="mentionClass">{{ username("Bamboo Manalac") }}</p>
+              <p :class="nameClass">{{ comment.name }}</p>
+              <p :class="mentionClass">{{ username(comment.name) }}</p>
             </div>
           </div>
 
           <div class="content">
-            Tignan mo ang iyong palad
+            {{ comment.comment_text }}
             <br />
-            <time datetime="2016-1-1">{{ ago(new Date()) }}</time>
-            <div class="comments-tab" v-show="commentBox">
+            <time datetime="2016-1-1"> {{ ago(comment.created_at) }}</time>
+            <div class="comments-tab">
               <p
                 class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3"
                 @click="showMoreComments"
@@ -66,9 +66,21 @@ export default {
   name: "BaseCommentCard",
   mixins: [mixin],
   props: {
+    comment: {
+      type: Object,
+      default: () => {
+        return {
+          id: 1,
+          name: "Bamboo Manalac",
+          comment_text: "Tignan mo ang iyong palad",
+          updated_at: new Date(),
+          created_at: new Date(),
+        };
+      },
+    },
     commentBox: {
       type: Boolean,
-      default: false
+      default: false,
     },
     cardClass: {
       type: String,
@@ -90,6 +102,9 @@ export default {
   data: () => ({
     details: {},
   }),
+  showMoreComments() {
+    this.$emit("show-more-comments");
+  },
 };
 </script>
 
