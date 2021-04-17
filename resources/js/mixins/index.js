@@ -1,7 +1,6 @@
 import { format } from 'timeago.js';
 const mixin = {
     data: () => ({
-        commentBox: false,
         name: null,
         comment_text: null
     }),

@@ -19,12 +19,12 @@
             Tignan mo ang iyong palad
             <br />
             <time datetime="2016-1-1">{{ ago(new Date()) }}</time>
-            <div class="comments-tab">
+            <div class="comments-tab" v-show="commentBox">
               <p
                 class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3"
                 @click="showMoreComments"
               >
-                View Comments
+                {{ commentBtnText }}
               </p>
               <p
                 class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold"
@@ -66,18 +66,26 @@ export default {
   name: "BaseCommentCard",
   mixins: [mixin],
   props: {
+    commentBox: {
+      type: Boolean,
+      default: false
+    },
     cardClass: {
       type: String,
-      default: "column is-12"
+      default: "column is-12",
     },
     nameClass: {
       type: String,
-      default: "title is-4 has-text-weight-bold"
+      default: "title is-4 has-text-weight-bold",
     },
     mentionClass: {
       type: String,
-      default: 'subtitle is-6'
-    }
+      default: "subtitle is-6",
+    },
+    commentBtnText: {
+      type: String,
+      default: "View Comments",
+    },
   },
   data: () => ({
     details: {},

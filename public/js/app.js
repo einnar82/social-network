@@ -1976,6 +1976,10 @@ __webpack_require__.r(__webpack_exports__);
   name: "BaseCommentCard",
   mixins: [_mixins__WEBPACK_IMPORTED_MODULE_0__["default"]],
   props: {
+    commentBox: {
+      type: Boolean,
+      "default": false
+    },
     cardClass: {
       type: String,
       "default": "column is-12"
@@ -1986,7 +1990,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     mentionClass: {
       type: String,
-      "default": 'subtitle is-6'
+      "default": "subtitle is-6"
+    },
+    commentBtnText: {
+      type: String,
+      "default": "View Comments"
     }
   },
   data: function data() {
@@ -2043,6 +2051,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_BaseCommentCard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/BaseCommentCard */ "./resources/js/components/BaseCommentCard.vue");
 /* harmony import */ var _helpers_http_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/http.js */ "./resources/js/helpers/http.js");
 /* harmony import */ var _mixins__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mixins */ "./resources/js/mixins/index.js");
+//
+//
+//
 //
 //
 //
@@ -56585,27 +56596,47 @@ var render = function() {
                 _vm._v(_vm._s(_vm.ago(new Date())))
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "comments-tab" }, [
-                _c(
-                  "p",
-                  {
-                    staticClass:
-                      "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3",
-                    on: { click: _vm.showMoreComments }
-                  },
-                  [_vm._v("\n              View Comments\n            ")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "p",
-                  {
-                    staticClass:
-                      "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
-                    on: { click: _vm.showCommentBox }
-                  },
-                  [_vm._v("\n              Add Comment\n            ")]
-                )
-              ]),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.commentBox,
+                      expression: "commentBox"
+                    }
+                  ],
+                  staticClass: "comments-tab"
+                },
+                [
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3",
+                      on: { click: _vm.showMoreComments }
+                    },
+                    [
+                      _vm._v(
+                        "\n              " +
+                          _vm._s(_vm.commentBtnText) +
+                          "\n            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
+                      on: { click: _vm.showCommentBox }
+                    },
+                    [_vm._v("\n              Add Comment\n            ")]
+                  )
+                ]
+              ),
               _vm._v(" "),
               _c(
                 "div",
@@ -56783,7 +56814,8 @@ var render = function() {
                 key: index,
                 attrs: {
                   cardClass: "column is-11 is-offset-1",
-                  nameClass: "title is-6 has-text-weight-bold"
+                  nameClass: "title is-6 has-text-weight-bold",
+                  commentBtnText: "View Replies"
                 }
               },
               _vm._l(comment.children, function(child, index) {
@@ -56793,7 +56825,8 @@ var render = function() {
                     key: index,
                     attrs: {
                       cardClass: "column is-10 is-offset-2",
-                      nameClass: "title is-6 has-text-weight-bold"
+                      nameClass: "title is-6 has-text-weight-bold",
+                      commentBtnText: "View Replies"
                     }
                   },
                   _vm._l(child.grand_children, function(grandchild, index) {
@@ -56801,7 +56834,8 @@ var render = function() {
                       key: index,
                       attrs: {
                         cardClass: "column is-9 is-offset-3",
-                        nameClass: "title is-6 has-text-weight-bold"
+                        nameClass: "title is-6 has-text-weight-bold",
+                        commentBtnText: "View Replies"
                       }
                     })
                   }),
@@ -69259,7 +69293,6 @@ __webpack_require__.r(__webpack_exports__);
 var mixin = {
   data: function data() {
     return {
-      commentBox: false,
       name: null,
       comment_text: null
     };

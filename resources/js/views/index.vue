@@ -7,18 +7,21 @@
           :key="index"
           cardClass="column is-11 is-offset-1"
           nameClass="title is-6 has-text-weight-bold"
+          commentBtnText="View Replies"
         >
           <base-comment-card
             v-for="(child, index) in comment.children"
             :key="index"
             cardClass="column is-10 is-offset-2"
             nameClass="title is-6 has-text-weight-bold"
+            commentBtnText="View Replies"
           >
             <base-comment-card
               v-for="(grandchild, index) in child.grand_children"
               :key="index"
               cardClass="column is-9 is-offset-3"
               nameClass="title is-6 has-text-weight-bold"
+              commentBtnText="View Replies"
             />
           </base-comment-card>
         </base-comment-card>
