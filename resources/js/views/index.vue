@@ -12,12 +12,13 @@
           v-for="(comment, index) in comments"
           :key="index"
           :comment="comment"
+          :commentBox="comment.enable"
           cardClass="column is-11 is-offset-1"
           nameClass="title is-6 has-text-weight-bold"
           commentBtnText="View Replies"
-          @show-more-comments="showMoreComments"
-          @show-comment-box="showCommentBox"
-          @send-comment="sendComment"
+          @show-more-comments="showMoreParentComments(comment)"
+          @show-comment-box="showParentCommentBox(comment)"
+          @send-comment="sendParentComment"
         >
           <base-comment-card
             v-for="(child, index) in comment.children"
@@ -59,19 +60,32 @@ export default {
     this.fetchComments();
   },
   methods: {
-    ...mapActions(["fetchComments", "addComment", "fetchOtherComments"]),
-    showCommentBox() {
-      console.log("comment");
+    ...mapActions([
+      "fetchComments",
+      "addComment",
+      "fetchOtherComments",
+      "enableParentCommentBox",
+      "addChildComment",
+    ]),
+    showCommentBox(comment) {
       this.commentBox = !this.commentBox;
     },
     showMoreComments(comment) {
-      this.fetchOtherComments();
-      console.log(comment);
+      this.fetchOtherComments(comment);
     },
     sendComment(payload) {
       this.addComment(payload).then((response) => {
         this.commentBox = !this.commentBox;
       });
+    },
+    showMoreParentComments(comment) {
+      console.log("parent_comment", comment);
+    },
+    showParentCommentBox(comment) {
+      this.enableParentCommentBox(comment);
+    },
+    sendParentComment(comment) {
+      this.addComment({ ...comment, parent_id: comment.comment_id });
     },
   },
   computed: {

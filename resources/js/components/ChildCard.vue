@@ -37,9 +37,6 @@ export default {
     grandchild: {
       type: Object,
     },
-  },
-  mounted() {
-    console.log(this.grandchild)
   }
 };
 </script>

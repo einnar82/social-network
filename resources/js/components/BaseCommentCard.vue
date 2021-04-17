@@ -28,7 +28,7 @@
               </p>
               <p
                 class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold"
-                @click="showCommentBox"
+                @click="showCommentBox(comment)"
               >
                 Add Comment
               </p>
@@ -111,17 +111,18 @@ export default {
     showMoreComments(comment) {
       this.$emit("show-more-comments", comment);
     },
-    showCommentBox() {
-      this.$emit("show-comment-box");
+    showCommentBox(comment) {
+      this.$emit("show-comment-box", comment);
     },
     sendComment() {
       this.$emit("send-comment", {
+        comment_id: this.comment.id,
         name: this.name,
         comment_text: this.comment_text,
         parent_id: this.comment.parent_id,
       });
-      this.name = null
-      this.comment_text = null
+      this.name = null;
+      this.comment_text = null;
     },
   },
 };

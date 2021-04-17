@@ -2023,11 +2023,12 @@ __webpack_require__.r(__webpack_exports__);
     showMoreComments: function showMoreComments(comment) {
       this.$emit("show-more-comments", comment);
     },
-    showCommentBox: function showCommentBox() {
-      this.$emit("show-comment-box");
+    showCommentBox: function showCommentBox(comment) {
+      this.$emit("show-comment-box", comment);
     },
     sendComment: function sendComment() {
       this.$emit("send-comment", {
+        comment_id: this.comment.id,
         name: this.name,
         comment_text: this.comment_text,
         parent_id: this.comment.parent_id
@@ -2134,6 +2135,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2150,14 +2152,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     this.fetchComments();
   },
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchComments", "addComment", "fetchOtherComments"])), {}, {
-    showCommentBox: function showCommentBox() {
-      console.log("comment");
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchComments", "addComment", "fetchOtherComments", "enableParentCommentBox", "addChildComment"])), {}, {
+    showCommentBox: function showCommentBox(comment) {
       this.commentBox = !this.commentBox;
     },
     showMoreComments: function showMoreComments(comment) {
-      this.fetchOtherComments();
-      console.log(comment);
+      this.fetchOtherComments(comment);
     },
     sendComment: function sendComment(payload) {
       var _this = this;
@@ -2165,6 +2165,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.addComment(payload).then(function (response) {
         _this.commentBox = !_this.commentBox;
       });
+    },
+    showMoreParentComments: function showMoreParentComments(comment) {
+      console.log("parent_comment", comment);
+    },
+    showParentCommentBox: function showParentCommentBox(comment) {
+      this.enableParentCommentBox(comment);
+    },
+    sendParentComment: function sendParentComment(comment) {
+      this.addComment(_objectSpread(_objectSpread({}, comment), {}, {
+        parent_id: comment.comment_id
+      }));
     }
   }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["comments"]))
@@ -57868,7 +57879,11 @@ var render = function() {
                   {
                     staticClass:
                       "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
-                    on: { click: _vm.showCommentBox }
+                    on: {
+                      click: function($event) {
+                        return _vm.showCommentBox(_vm.comment)
+                      }
+                    }
                   },
                   [_vm._v("\n              Add Comment\n            ")]
                 )
@@ -58058,14 +58073,19 @@ var render = function() {
                 key: index,
                 attrs: {
                   comment: comment,
+                  commentBox: comment.enable,
                   cardClass: "column is-11 is-offset-1",
                   nameClass: "title is-6 has-text-weight-bold",
                   commentBtnText: "View Replies"
                 },
                 on: {
-                  "show-more-comments": _vm.showMoreComments,
-                  "show-comment-box": _vm.showCommentBox,
-                  "send-comment": _vm.sendComment
+                  "show-more-comments": function($event) {
+                    return _vm.showMoreParentComments(comment)
+                  },
+                  "show-comment-box": function($event) {
+                    return _vm.showParentCommentBox(comment)
+                  },
+                  "send-comment": _vm.sendParentComment
                 }
               },
               _vm._l(comment.children, function(child, index) {
@@ -71600,14 +71620,29 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
     details: {}
   },
   mutations: {
+    ADD_CHILD_COMMENT: function ADD_CHILD_COMMENT(state, child) {
+      child.grand_children = [];
+      var objIndex = state.comments.findIndex(function (obj) {
+        return obj.id == child.parent_id;
+      });
+      var childrenArray = state.comments[objIndex].children;
+      childrenArray.unshift(child);
+      state.comments[objIndex].enable = !state.comments[objIndex].enable;
+    },
     FETCH_COMMENTS: function FETCH_COMMENTS(state, comments) {
-      state.comments = comments;
+      state.comments = [].concat(_toConsumableArray(comments), _toConsumableArray(state.comments));
     },
     FETCH_DETAILS: function FETCH_DETAILS(state, details) {
       state.details = details;
     },
     ADD_COMMENT: function ADD_COMMENT(state, comment) {
       state.comments = [_objectSpread({}, comment)].concat(_toConsumableArray(state.comments));
+    },
+    ENABLE_PARENT_COMMENT_BOX: function ENABLE_PARENT_COMMENT_BOX(state, parentComment) {
+      var objIndex = state.comments.findIndex(function (obj) {
+        return obj.id == parentComment.id;
+      });
+      state.comments[objIndex].enable = !state.comments[objIndex].enable;
     }
   },
   getters: {
@@ -71616,9 +71651,19 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
     }
   },
   actions: {
-    fetchComments: function fetchComments(_ref) {
+    addChildComment: function addChildComment(_ref, payload) {
       var commit = _ref.commit,
           state = _ref.state;
+      commit('ADD_CHILD_COMMENT', payload);
+    },
+    enableParentCommentBox: function enableParentCommentBox(_ref2, comment) {
+      var commit = _ref2.commit,
+          state = _ref2.state;
+      commit('ENABLE_PARENT_COMMENT_BOX', comment);
+    },
+    fetchComments: function fetchComments(_ref3) {
+      var commit = _ref3.commit,
+          state = _ref3.state;
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
         url: "/comments",
         method: "get"
@@ -71629,16 +71674,17 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
 
         var updatedComments = data.map(function (item) {
           return _objectSpread(_objectSpread({}, item), {}, {
-            enable: false
+            enable: false,
+            children: []
           });
         });
         commit('FETCH_COMMENTS', updatedComments);
         commit('FETCH_DETAILS', others);
       });
     },
-    fetchOtherComments: function fetchOtherComments(_ref2) {
-      var commit = _ref2.commit,
-          state = _ref2.state;
+    fetchOtherComments: function fetchOtherComments(_ref4) {
+      var commit = _ref4.commit,
+          state = _ref4.state;
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
         url: state.details.links.next,
         method: "get"
@@ -71656,26 +71702,34 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
         commit('FETCH_DETAILS', others);
       });
     },
-    addComment: function addComment(_ref3, payload) {
-      var commit = _ref3.commit,
-          state = _ref3.state;
-      Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
-        url: "/comments",
-        method: "post",
-        data: _objectSpread({}, payload)
-      }).then(function (response) {
-        var _response$data3 = response.data,
-            data = _response$data3.data,
-            others = _objectWithoutProperties(_response$data3, ["data"]);
+    addComment: function addComment(_ref5, payload) {
+      var commit = _ref5.commit,
+          state = _ref5.state;
+      return new Promise(function (resolve, reject) {
+        Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
+          url: "/comments",
+          method: "post",
+          data: _objectSpread({}, payload)
+        }).then(function (response) {
+          var _response$data3 = response.data,
+              data = _response$data3.data,
+              others = _objectWithoutProperties(_response$data3, ["data"]);
 
-        var updatedComment = _objectSpread(_objectSpread({}, data), {}, {
-          enable: false
+          var updatedComment = _objectSpread(_objectSpread({}, data), {}, {
+            enable: false,
+            children: []
+          });
+
+          if (payload.parent_id) {
+            commit('ADD_CHILD_COMMENT', updatedComment);
+            resolve(updatedComment);
+          } else {
+            commit('ADD_COMMENT', updatedComment);
+            resolve(updatedComment);
+          }
+        })["catch"](function (error) {
+          reject(error);
         });
-
-        commit('ADD_COMMENT', updatedComment);
-        resolve(comment);
-      })["catch"](function (error) {
-        Object(lodash__WEBPACK_IMPORTED_MODULE_7__["reject"])(error);
       });
     }
   }

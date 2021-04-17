@@ -22,8 +22,15 @@ const store = new Vuex.Store({
         details: {}
     },
     mutations: {
+        ADD_CHILD_COMMENT: (state, child) => {
+            child.grand_children = []
+            let objIndex = state.comments.findIndex((obj => obj.id == child.parent_id));
+            let childrenArray = state.comments[objIndex].children
+            childrenArray.unshift(child)
+            state.comments[objIndex].enable = !state.comments[objIndex].enable
+        },
         FETCH_COMMENTS: (state, comments) => {
-            state.comments = comments
+            state.comments = [...comments, ...state.comments]
         },
         FETCH_DETAILS: (state, details) => {
             state.details = details
@@ -32,12 +39,28 @@ const store = new Vuex.Store({
             state.comments = [{
                 ...comment
             }, ...state.comments]
+        },
+        ENABLE_PARENT_COMMENT_BOX: (state, parentComment) => {
+            let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
+            state.comments[objIndex].enable = !state.comments[objIndex].enable
         }
     },
     getters: {
         comments: state => state.comments
     },
     actions: {
+        addChildComment({
+            commit,
+            state
+        }, payload) {
+            commit('ADD_CHILD_COMMENT', payload)
+        },
+        enableParentCommentBox({
+            commit,
+            state
+        }, comment) {
+            commit('ENABLE_PARENT_COMMENT_BOX', comment)
+        },
         fetchComments({
             commit,
             state
@@ -53,7 +76,8 @@ const store = new Vuex.Store({
                 const updatedComments = data.map(item => {
                     return {
                         ...item,
-                        enable: false
+                        enable: false,
+                        children: []
                     }
                 })
                 commit('FETCH_COMMENTS', updatedComments)
@@ -86,26 +110,36 @@ const store = new Vuex.Store({
             commit,
             state
         }, payload) {
-            httpClient({
-                url: "/comments",
-                method: "post",
-                data: {
-                    ...payload
-                }
-            }).then((response) => {
-                const {
-                    data,
-                    ...others
-                } = response.data
-                const updatedComment = {
-                    ...data,
-                    enable: false
-                }
-                commit('ADD_COMMENT', updatedComment)
-                resolve(comment)
-            }).catch(error => {
-                reject(error)
+            return new Promise((resolve, reject) => {
+                httpClient({
+                    url: "/comments",
+                    method: "post",
+                    data: {
+                        ...payload
+                    }
+                }).then((response) => {
+                    const {
+                        data,
+                        ...others
+                    } = response.data
+                    const updatedComment = {
+                        ...data,
+                        enable: false,
+                        children: []
+                    }
+                    if (payload.parent_id) {
+                        commit('ADD_CHILD_COMMENT', updatedComment)
+                        resolve(updatedComment)
+                    } else {
+                        commit('ADD_COMMENT', updatedComment)
+                        resolve(updatedComment)
+                    }
+
+                }).catch(error => {
+                    reject(error)
+                })
             })
+
         }
     }
 })
