@@ -105,7 +105,7 @@ export default {
         this.name = null;
         // this.posts[0].comments.unshift(response.data);
         // this.posts = response.data;
-        this.$emit("send-child-comment", response.data);
+        this.$emit("send-child-comment", response.data.data);
       });
     },
   },

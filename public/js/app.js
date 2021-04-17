@@ -2023,7 +2023,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.name = null; // this.posts[0].comments.unshift(response.data);
         // this.posts = response.data;
 
-        _this.$emit("send-child-comment", response.data);
+        _this.$emit("send-child-comment", response.data.data);
       });
     }
   }
@@ -2267,8 +2267,9 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
         url: "/comments/".concat(comment.id),
         method: "get"
       }).then(function (response) {
-        var data = response.data,
-            otherDetails = _objectWithoutProperties(response, ["data"]);
+        var _response$data = response.data,
+            data = _response$data.data,
+            otherDetails = _objectWithoutProperties(_response$data, ["data"]);
 
         var parentComment = _this.posts[0].comments.find(function (item) {
           return item.id === comment.id;
@@ -2300,9 +2301,9 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
       }).then(function (response) {
         console.log("other comments", response.data);
 
-        var _response$data = response.data,
-            data = _response$data.data,
-            otherDetails = _objectWithoutProperties(_response$data, ["data"]);
+        var _response$data2 = response.data,
+            data = _response$data2.data,
+            otherDetails = _objectWithoutProperties(_response$data2, ["data"]);
 
         var latestComments = data.map(function (comment) {
           return _objectSpread(_objectSpread({}, comment), {}, {
@@ -2331,7 +2332,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
         method: "post",
         data: _objectSpread({}, originalPayload)
       }).then(function (response) {
-        var mutatedComment = _objectSpread(_objectSpread({}, response.data), {}, {
+        var mutatedComment = _objectSpread(_objectSpread({}, response.data.data), {}, {
           enable: false,
           children: []
         });
@@ -2353,9 +2354,9 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
         url: "/comments",
         method: "get"
       }).then(function (response) {
-        var _response$data2 = response.data,
-            data = _response$data2.data,
-            otherDetails = _objectWithoutProperties(_response$data2, ["data"]);
+        var _response$data3 = response.data,
+            data = _response$data3.data,
+            otherDetails = _objectWithoutProperties(_response$data3, ["data"]);
 
         var latestComments = data.map(function (comment) {
           return _objectSpread(_objectSpread({}, comment), {}, {

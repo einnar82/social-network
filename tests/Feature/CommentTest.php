@@ -31,7 +31,9 @@ class CommentTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJson([
-                'name' => 'test'
+                'data' => [
+                    'name' => 'test'
+                ]
             ]);
     }
 
@@ -53,7 +55,7 @@ class CommentTest extends TestCase
 
         $response = $this->postJson('/api/comments', [
             'comment_text' => 'Whoppy',
-            'parent_id' => "$created->id",
+            'parent_id' => $created->data->id,
             'name' => 'das',
         ]);
 
@@ -69,7 +71,7 @@ class CommentTest extends TestCase
 
         $created = json_decode($createdResponse->getContent());
 
-        $response = $this->getJson("/api/comments/$created->id");
+        $response = $this->getJson("/api/comments/{$created->data->id}");
 
         $response->assertStatus(200);
     }

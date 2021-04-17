@@ -106,7 +106,7 @@ export default {
         url: `/comments/${comment.id}`,
         method: "get",
       }).then((response) => {
-        const { data, ...otherDetails } = response;
+        const { data, ...otherDetails } = response.data;
         const parentComment = this.posts[0].comments.find((item) => {
           return item.id === comment.id;
         });
@@ -171,7 +171,7 @@ export default {
         },
       }).then((response) => {
         const mutatedComment = {
-          ...response.data,
+          ...response.data.data,
           enable: false,
           children: [],
         };
