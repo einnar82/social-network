@@ -1977,6 +1977,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1992,6 +1995,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
+      name: null,
       child_comment_text: null
     };
   },
@@ -2007,7 +2011,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var originalPayload = {
         parent_id: this.comment.id,
-        name: "Bamboo Mañalac",
+        name: this.name,
         comment_text: this.child_comment_text
       };
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_0__["default"])({
@@ -2015,7 +2019,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         method: "post",
         data: _objectSpread({}, originalPayload)
       }).then(function (response) {
-        _this.child_comment_text = null; // this.posts[0].comments.unshift(response.data);
+        _this.child_comment_text = null;
+        _this.name = null; // this.posts[0].comments.unshift(response.data);
         // this.posts = response.data;
 
         _this.$emit("send-child-comment", response.data);
@@ -2226,6 +2231,9 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2244,6 +2252,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
         comments: []
       }],
       details: {},
+      name: null,
       parent_comment_text: null
     };
   },
@@ -2302,7 +2311,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
           });
         });
         _this2.posts = [{
-          name: "Bamboo Mañalac",
+          name: "Bamboo Manalac",
           title: "Tignan mo ang iyong palad",
           updated_at: new Date(),
           comments: _this2.posts[0].comments.concat(latestComments)
@@ -2314,7 +2323,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
       var _this3 = this;
 
       var originalPayload = {
-        name: "Bamboo Mañalac",
+        name: this.name,
         comment_text: this.parent_comment_text
       };
       Object(_helpers_http_js__WEBPACK_IMPORTED_MODULE_2__["default"])({
@@ -2330,6 +2339,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
         _this3.posts[0].comments.unshift(mutatedComment);
 
         _this3.parent_comment_text = null;
+        _this3.name = null;
         _this3.commentBox = !_this3.commentBox;
       });
     },
@@ -56919,7 +56929,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "subtitle is-6" }, [
-                _vm._v("@BambooMusicLive")
+                _vm._v(_vm._s(_vm.username(_vm.comment.name)))
               ])
             ])
           ]),
@@ -56980,6 +56990,23 @@ var render = function() {
                   "div",
                   { staticClass: "column" },
                   [
+                    _c(
+                      "b-field",
+                      { attrs: { label: "Name" } },
+                      [
+                        _c("b-input", {
+                          model: {
+                            value: _vm.name,
+                            callback: function($$v) {
+                              _vm.name = $$v
+                            },
+                            expression: "name"
+                          }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
                     _c(
                       "b-field",
                       { attrs: { label: "Add a comment" } },
@@ -57116,7 +57143,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "subtitle is-6" }, [
-                _vm._v("@BambooMusicLive")
+                _vm._v(_vm._s(_vm.username(_vm.child.name)))
               ])
             ])
           ]),
@@ -57192,7 +57219,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("p", { staticClass: "subtitle is-6" }, [
-                    _vm._v("@BambooMusicLive")
+                    _vm._v(_vm._s(_vm.username(post.name)))
                   ])
                 ])
               ]),
@@ -57245,6 +57272,23 @@ var render = function() {
                       "div",
                       { staticClass: "column" },
                       [
+                        _c(
+                          "b-field",
+                          { attrs: { label: "Name" } },
+                          [
+                            _c("b-input", {
+                              model: {
+                                value: _vm.name,
+                                callback: function($$v) {
+                                  _vm.name = $$v
+                                },
+                                expression: "name"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
                         _c(
                           "b-field",
                           { attrs: { label: "Add a comment" } },
@@ -69867,7 +69911,10 @@ var mixin = {
     ago: function ago(time) {
       return Object(timeago_js__WEBPACK_IMPORTED_MODULE_0__["format"])(time);
     },
-    sendComment: function sendComment() {}
+    sendComment: function sendComment() {},
+    username: function username(name) {
+      return "@".concat(name.toLowerCase().replace(/ /g, ''));
+    }
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (mixin);

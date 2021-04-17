@@ -4,7 +4,10 @@ const mixin = {
         ago(time) {
             return format(time)
         },
-        sendComment() {}
+        sendComment() {},
+        username(name) {
+            return `@${name.toLowerCase().replace(/ /g, '')}`;
+          }
     }
 }
 

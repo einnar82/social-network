@@ -15,7 +15,7 @@
             </div>
             <div class="media-content">
               <p class="title is-4 has-text-weight-bold">{{ post.name }}</p>
-              <p class="subtitle is-6">@BambooMusicLive</p>
+              <p class="subtitle is-6">{{username(post.name)}}</p>
             </div>
           </div>
 
@@ -39,6 +39,9 @@
             </div>
             <div class="columns" v-show="commentBox">
               <div class="column">
+                <b-field label="Name">
+                  <b-input v-model="name"></b-input>
+                </b-field>
                 <b-field label="Add a comment">
                   <b-input
                     maxlength="200"
@@ -91,6 +94,7 @@ export default {
       },
     ],
     details: {},
+    name: null,
     parent_comment_text: null,
   }),
   mounted() {
@@ -110,9 +114,9 @@ export default {
         const updatedComment = Object.assign(parentComment, {
           ...parentComment,
           children: data,
-        })
+        });
 
-        console.log("updatedComment", updatedComment)
+        console.log("updatedComment", updatedComment);
       });
     },
     showCommentBox() {
@@ -144,7 +148,7 @@ export default {
         });
         this.posts = [
           {
-            name: "Bamboo Mañalac",
+            name: "Bamboo Manalac",
             title: "Tignan mo ang iyong palad",
             updated_at: new Date(),
             comments: this.posts[0].comments.concat(latestComments),
@@ -155,7 +159,7 @@ export default {
     },
     sendComment() {
       const originalPayload = {
-        name: "Bamboo Mañalac",
+        name: this.name,
         comment_text: this.parent_comment_text,
       };
 
@@ -173,6 +177,7 @@ export default {
         };
         this.posts[0].comments.unshift(mutatedComment);
         this.parent_comment_text = null;
+        this.name = null;
         this.commentBox = !this.commentBox;
       });
     },

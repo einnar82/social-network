@@ -11,7 +11,7 @@
             </div>
             <div class="media-content">
               <p class="title is-6 has-text-weight-bold">{{ comment.name }}</p>
-              <p class="subtitle is-6">@BambooMusicLive</p>
+              <p class="subtitle is-6">{{ username(comment.name) }}</p>
             </div>
           </div>
 
@@ -39,6 +39,9 @@
 
             <div class="columns" v-show="replyBox">
               <div class="column">
+                <b-field label="Name">
+                  <b-input v-model="name"></b-input>
+                </b-field>
                 <b-field label="Add a comment">
                   <b-input
                     maxlength="200"
@@ -75,6 +78,7 @@ export default {
     },
   },
   data: () => ({
+    name: null,
     child_comment_text: null,
   }),
   methods: {
@@ -87,7 +91,7 @@ export default {
     sendComment() {
       const originalPayload = {
         parent_id: this.comment.id,
-        name: "Bamboo Mañalac",
+        name: this.name,
         comment_text: this.child_comment_text,
       };
       httpClient({
@@ -98,6 +102,7 @@ export default {
         },
       }).then((response) => {
         this.child_comment_text = null;
+        this.name = null;
         // this.posts[0].comments.unshift(response.data);
         // this.posts = response.data;
         this.$emit("send-child-comment", response.data);

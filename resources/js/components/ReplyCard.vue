@@ -14,7 +14,7 @@
             </div>
             <div class="media-content">
               <p class="title is-6 has-text-weight-bold">{{ child.name }}</p>
-              <p class="subtitle is-6">@BambooMusicLive</p>
+              <p class="subtitle is-6">{{ username(child.name) }}</p>
             </div>
           </div>
 
