@@ -114,7 +114,15 @@ export default {
     showCommentBox() {
       this.$emit("show-comment-box");
     },
-    sendComment() {}
+    sendComment() {
+      this.$emit("send-comment", {
+        name: this.name,
+        comment_text: this.comment_text,
+        parent_id: this.comment.parent_id,
+      });
+      this.name = null
+      this.comment_text = null
+    },
   },
 };
 </script>

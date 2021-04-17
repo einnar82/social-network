@@ -5,6 +5,9 @@ import Vuex from 'vuex'
 import httpClient from './helpers/http'
 import 'buefy/dist/buefy.css'
 import './bootstrap';
+import {
+    reject
+} from 'lodash'
 
 
 Vue.use(Buefy)
@@ -26,7 +29,9 @@ const store = new Vuex.Store({
             state.details = details
         },
         ADD_COMMENT: (state, comment) => {
-            state.comments = state.comments.unshift(comment)
+            state.comments = [{
+                ...comment
+            }, ...state.comments]
         }
     },
     getters: {
@@ -53,10 +58,54 @@ const store = new Vuex.Store({
                 })
                 commit('FETCH_COMMENTS', updatedComments)
                 commit('FETCH_DETAILS', others)
-                console.log(others)
-                // this.posts[0].comments.unshift(response.data);
-                // this.posts = response.data;
             });
+        },
+        fetchOtherComments({
+            commit,
+            state
+        }) {
+            httpClient({
+                url: state.details.links.next,
+                method: "get",
+            }).then((response) => {
+                const {
+                    data,
+                    ...others
+                } = response.data
+                const updatedComments = data.map(item => {
+                    return {
+                        ...item,
+                        enable: false
+                    }
+                })
+                commit('FETCH_COMMENTS', updatedComments)
+                commit('FETCH_DETAILS', others)
+            });
+        },
+        addComment({
+            commit,
+            state
+        }, payload) {
+            httpClient({
+                url: "/comments",
+                method: "post",
+                data: {
+                    ...payload
+                }
+            }).then((response) => {
+                const {
+                    data,
+                    ...others
+                } = response.data
+                const updatedComment = {
+                    ...data,
+                    enable: false
+                }
+                commit('ADD_COMMENT', updatedComment)
+                resolve(comment)
+            }).catch(error => {
+                reject(error)
+            })
         }
     }
 })

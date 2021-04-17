@@ -6,6 +6,7 @@
         :commentBox="commentBox"
         @show-more-comments="showMoreComments"
         @show-comment-box="showCommentBox"
+        @send-comment="sendComment"
       >
         <base-comment-card
           v-for="(comment, index) in comments"
@@ -14,6 +15,9 @@
           cardClass="column is-11 is-offset-1"
           nameClass="title is-6 has-text-weight-bold"
           commentBtnText="View Replies"
+          @show-more-comments="showMoreComments"
+          @show-comment-box="showCommentBox"
+          @send-comment="sendComment"
         >
           <base-comment-card
             v-for="(child, index) in comment.children"
@@ -55,13 +59,19 @@ export default {
     this.fetchComments();
   },
   methods: {
-    ...mapActions(["fetchComments"]),
+    ...mapActions(["fetchComments", "addComment", "fetchOtherComments"]),
     showCommentBox() {
       console.log("comment");
       this.commentBox = !this.commentBox;
     },
     showMoreComments(comment) {
+      this.fetchOtherComments();
       console.log(comment);
+    },
+    sendComment(payload) {
+      this.addComment(payload).then((response) => {
+        this.commentBox = !this.commentBox;
+      });
     },
   },
   computed: {

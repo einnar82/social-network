@@ -2026,7 +2026,15 @@ __webpack_require__.r(__webpack_exports__);
     showCommentBox: function showCommentBox() {
       this.$emit("show-comment-box");
     },
-    sendComment: function sendComment() {}
+    sendComment: function sendComment() {
+      this.$emit("send-comment", {
+        name: this.name,
+        comment_text: this.comment_text,
+        parent_id: this.comment.parent_id
+      });
+      this.name = null;
+      this.comment_text = null;
+    }
   }
 });
 
@@ -2122,6 +2130,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2138,13 +2150,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     this.fetchComments();
   },
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchComments"])), {}, {
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchComments", "addComment", "fetchOtherComments"])), {}, {
     showCommentBox: function showCommentBox() {
       console.log("comment");
       this.commentBox = !this.commentBox;
     },
     showMoreComments: function showMoreComments(comment) {
+      this.fetchOtherComments();
       console.log(comment);
+    },
+    sendComment: function sendComment(payload) {
+      var _this = this;
+
+      this.addComment(payload).then(function (response) {
+        _this.commentBox = !_this.commentBox;
+      });
     }
   }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["comments"]))
@@ -58027,7 +58047,8 @@ var render = function() {
             attrs: { commentBar: _vm.commentBar, commentBox: _vm.commentBox },
             on: {
               "show-more-comments": _vm.showMoreComments,
-              "show-comment-box": _vm.showCommentBox
+              "show-comment-box": _vm.showCommentBox,
+              "send-comment": _vm.sendComment
             }
           },
           _vm._l(_vm.comments, function(comment, index) {
@@ -58040,6 +58061,11 @@ var render = function() {
                   cardClass: "column is-11 is-offset-1",
                   nameClass: "title is-6 has-text-weight-bold",
                   commentBtnText: "View Replies"
+                },
+                on: {
+                  "show-more-comments": _vm.showMoreComments,
+                  "show-comment-box": _vm.showCommentBox,
+                  "send-comment": _vm.sendComment
                 }
               },
               _vm._l(comment.children, function(child, index) {
@@ -71532,15 +71558,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var buefy_dist_buefy_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(buefy_dist_buefy_css__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 
 
@@ -71566,7 +71607,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       state.details = details;
     },
     ADD_COMMENT: function ADD_COMMENT(state, comment) {
-      state.comments = state.comments.unshift(comment);
+      state.comments = [_objectSpread({}, comment)].concat(_toConsumableArray(state.comments));
     }
   },
   getters: {
@@ -71593,8 +71634,48 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
         });
         commit('FETCH_COMMENTS', updatedComments);
         commit('FETCH_DETAILS', others);
-        console.log(others); // this.posts[0].comments.unshift(response.data);
-        // this.posts = response.data;
+      });
+    },
+    fetchOtherComments: function fetchOtherComments(_ref2) {
+      var commit = _ref2.commit,
+          state = _ref2.state;
+      Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
+        url: state.details.links.next,
+        method: "get"
+      }).then(function (response) {
+        var _response$data2 = response.data,
+            data = _response$data2.data,
+            others = _objectWithoutProperties(_response$data2, ["data"]);
+
+        var updatedComments = data.map(function (item) {
+          return _objectSpread(_objectSpread({}, item), {}, {
+            enable: false
+          });
+        });
+        commit('FETCH_COMMENTS', updatedComments);
+        commit('FETCH_DETAILS', others);
+      });
+    },
+    addComment: function addComment(_ref3, payload) {
+      var commit = _ref3.commit,
+          state = _ref3.state;
+      Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
+        url: "/comments",
+        method: "post",
+        data: _objectSpread({}, payload)
+      }).then(function (response) {
+        var _response$data3 = response.data,
+            data = _response$data3.data,
+            others = _objectWithoutProperties(_response$data3, ["data"]);
+
+        var updatedComment = _objectSpread(_objectSpread({}, data), {}, {
+          enable: false
+        });
+
+        commit('ADD_COMMENT', updatedComment);
+        resolve(comment);
+      })["catch"](function (error) {
+        Object(lodash__WEBPACK_IMPORTED_MODULE_7__["reject"])(error);
       });
     }
   }
