@@ -71649,7 +71649,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       state.comments[objIndex].enable = !state.comments[objIndex].enable;
     },
     FETCH_COMMENTS: function FETCH_COMMENTS(state, comments) {
-      state.comments = [].concat(_toConsumableArray(comments), _toConsumableArray(state.comments));
+      state.comments = state.comments.concat(comments);
     },
     FETCH_DETAILS: function FETCH_DETAILS(state, details) {
       state.details = details;

@@ -30,7 +30,7 @@ const store = new Vuex.Store({
             state.comments[objIndex].enable = !state.comments[objIndex].enable
         },
         FETCH_COMMENTS: (state, comments) => {
-            state.comments = [...comments, ...state.comments]
+            state.comments = state.comments.concat(comments)
         },
         FETCH_DETAILS: (state, details) => {
             state.details = details
