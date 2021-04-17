@@ -24,9 +24,13 @@
             v-for="(child, index) in comment.children"
             :key="index"
             :comment="child"
+            :commentBox="child.enable"
             cardClass="column is-10 is-offset-2"
             nameClass="title is-6 has-text-weight-bold"
             commentBtnText="View Replies"
+            @show-more-comments="showMoreGrandchildComments(comment)"
+            @show-comment-box="showGrandchildCommentBox(comment)"
+            @send-comment="sendGrandchildComment"
           >
             <base-comment-card
               v-for="(grandchild, index) in child.grand_children"
@@ -65,7 +69,9 @@ export default {
       "addComment",
       "fetchOtherComments",
       "enableParentCommentBox",
+      "enableGrandchildCommentBox",
       "addChildComment",
+      "fetchParentComments",
     ]),
     showCommentBox(comment) {
       this.commentBox = !this.commentBox;
@@ -79,7 +85,7 @@ export default {
       });
     },
     showMoreParentComments(comment) {
-      console.log("parent_comment", comment);
+      this.fetchParentComments(comment.id);
     },
     showParentCommentBox(comment) {
       this.enableParentCommentBox(comment);
@@ -87,6 +93,11 @@ export default {
     sendParentComment(comment) {
       this.addComment({ ...comment, parent_id: comment.comment_id });
     },
+    showMoreGrandchildComments(comment) {},
+    showGrandchildCommentBox(comment) {
+      this.enableGrandchildCommentBox(comment);
+    },
+    sendGrandchildComment(comment) {},
   },
   computed: {
     ...mapGetters(["comments"]),

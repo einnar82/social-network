@@ -40,7 +40,17 @@ const store = new Vuex.Store({
                 ...comment
             }, ...state.comments]
         },
+        APPEND_CHILD_COMMENTS: (state, payload) => {
+            let objIndex = state.comments.findIndex((obj => obj.id == payload.id));
+            console.log(state.comments[objIndex])
+            console.log("payload.comments", payload.comments)
+            state.comments[objIndex].children = [...payload.comments, ...state.comments[objIndex].children]
+        },
         ENABLE_PARENT_COMMENT_BOX: (state, parentComment) => {
+            let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
+            state.comments[objIndex].enable = !state.comments[objIndex].enable
+        },
+        ENABLE_GRANDCHILD_COMMENT_BOX: (state, grandChildComment) => {
             let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
             state.comments[objIndex].enable = !state.comments[objIndex].enable
         }
@@ -60,6 +70,37 @@ const store = new Vuex.Store({
             state
         }, comment) {
             commit('ENABLE_PARENT_COMMENT_BOX', comment)
+        },
+        enableGrandchildCommentBox({
+            commit,
+            state
+        }, comment) {
+            commit('ENABLE_GRANDCHILD_COMMENT_BOX', comment)
+        },
+        fetchParentComments({
+            commit,
+            state
+        }, id) {
+            httpClient({
+                url: `/comments/${id}`,
+                method: "get",
+            }).then((response) => {
+                const {
+                    data,
+                    ...others
+                } = response.data
+                const updatedComments = data.map(item => {
+                    return {
+                        ...item,
+                        enable: false,
+                        grand_children: []
+                    }
+                })
+                commit('APPEND_CHILD_COMMENTS', {
+                    comments: updatedComments,
+                    id
+                })
+            });
         },
         fetchComments({
             commit,
