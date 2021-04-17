@@ -111,12 +111,10 @@ export default {
           return item.id === comment.id;
         });
 
-        const updatedComment = Object.assign(parentComment, {
+        Object.assign(parentComment, {
           ...parentComment,
           children: data,
         });
-
-        console.log("updatedComment", updatedComment);
       });
     },
     showCommentBox() {

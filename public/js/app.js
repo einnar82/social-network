@@ -2275,10 +2275,9 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
           return item.id === comment.id;
         });
 
-        var updatedComment = Object.assign(parentComment, _objectSpread(_objectSpread({}, parentComment), {}, {
+        Object.assign(parentComment, _objectSpread(_objectSpread({}, parentComment), {}, {
           children: data
         }));
-        console.log("updatedComment", updatedComment);
       });
     },
     showCommentBox: function showCommentBox() {
