@@ -2,11 +2,11 @@
   <div class="columns is-full is-centered pt-6">
     <div class="column is-6">
       <div
-        class="card shadow-override bg-override"
+        class="card bg-override"
         v-for="(post, index) in posts"
         :key="index"
       >
-        <div class="card-content card-shade">
+        <div class="card-content card-shade  shadow-override">
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
@@ -235,9 +235,9 @@ export default {
   border: 0px;
 }
 
-.bg-override {
-  background-color: #4bcffa;
-}
+// .bg-override {
+//   background-color: #4bcffa;
+// }
 
 .comments-tab {
   display: flex;

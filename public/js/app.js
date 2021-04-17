@@ -24589,7 +24589,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".pointer-cursor[data-v-5c49133a] {\n  cursor: pointer;\n}\n.card-shade[data-v-5c49133a] {\n  background-color: #ffff;\n  border: 2px;\n}\n.shadow-override[data-v-5c49133a] {\n  box-shadow: none;\n  border: 0px;\n}\n.bg-override[data-v-5c49133a] {\n  background-color: #4bcffa;\n}\n.comments-tab[data-v-5c49133a] {\n  display: flex;\n}", ""]);
+exports.push([module.i, ".pointer-cursor[data-v-5c49133a] {\n  cursor: pointer;\n}\n.card-shade[data-v-5c49133a] {\n  background-color: #ffff;\n  border: 2px;\n}\n.shadow-override[data-v-5c49133a] {\n  box-shadow: none;\n  border: 0px;\n}\n.comments-tab[data-v-5c49133a] {\n  display: flex;\n}", ""]);
 
 // exports
 
@@ -57207,125 +57207,131 @@ var render = function() {
       _vm._l(_vm.posts, function(post, index) {
         return _c(
           "div",
-          { key: index, staticClass: "card shadow-override bg-override" },
+          { key: index, staticClass: "card bg-override" },
           [
-            _c("div", { staticClass: "card-content card-shade" }, [
-              _c("div", { staticClass: "media" }, [
-                _vm._m(0, true),
+            _c(
+              "div",
+              { staticClass: "card-content card-shade  shadow-override" },
+              [
+                _c("div", { staticClass: "media" }, [
+                  _vm._m(0, true),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "media-content" }, [
+                    _c(
+                      "p",
+                      { staticClass: "title is-4 has-text-weight-bold" },
+                      [_vm._v(_vm._s(post.name))]
+                    ),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "subtitle is-6" }, [
+                      _vm._v(_vm._s(_vm.username(post.name)))
+                    ])
+                  ])
+                ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "media-content" }, [
-                  _c("p", { staticClass: "title is-4 has-text-weight-bold" }, [
-                    _vm._v(_vm._s(post.name))
+                _c("div", { staticClass: "content" }, [
+                  _vm._v("\n          " + _vm._s(post.title) + "\n          "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("time", { attrs: { datetime: "2016-1-1" } }, [
+                    _vm._v(_vm._s(_vm.ago(post.updated_at)))
                   ]),
                   _vm._v(" "),
-                  _c("p", { staticClass: "subtitle is-6" }, [
-                    _vm._v(_vm._s(_vm.username(post.name)))
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "content" }, [
-                _vm._v("\n          " + _vm._s(post.title) + "\n          "),
-                _c("br"),
-                _vm._v(" "),
-                _c("time", { attrs: { datetime: "2016-1-1" } }, [
-                  _vm._v(_vm._s(_vm.ago(post.updated_at)))
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "comments-tab" }, [
-                  _c(
-                    "p",
-                    {
-                      staticClass:
-                        "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3",
-                      on: { click: _vm.showMoreComments }
-                    },
-                    [_vm._v("\n              View Comments\n            ")]
-                  ),
+                  _c("div", { staticClass: "comments-tab" }, [
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3",
+                        on: { click: _vm.showMoreComments }
+                      },
+                      [_vm._v("\n              View Comments\n            ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
+                        on: { click: _vm.showCommentBox }
+                      },
+                      [_vm._v("\n              Add Comment\n            ")]
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
-                    "p",
+                    "div",
                     {
-                      staticClass:
-                        "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold",
-                      on: { click: _vm.showCommentBox }
-                    },
-                    [_vm._v("\n              Add Comment\n            ")]
-                  )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.commentBox,
-                        expression: "commentBox"
-                      }
-                    ],
-                    staticClass: "columns"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "column" },
-                      [
-                        _c(
-                          "b-field",
-                          { attrs: { label: "Name" } },
-                          [
-                            _c("b-input", {
-                              model: {
-                                value: _vm.name,
-                                callback: function($$v) {
-                                  _vm.name = $$v
-                                },
-                                expression: "name"
-                              }
-                            })
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "b-field",
-                          { attrs: { label: "Add a comment" } },
-                          [
-                            _c("b-input", {
-                              attrs: {
-                                maxlength: "200",
-                                type: "textarea",
-                                size: "is-small"
-                              },
-                              model: {
-                                value: _vm.parent_comment_text,
-                                callback: function($$v) {
-                                  _vm.parent_comment_text = $$v
-                                },
-                                expression: "parent_comment_text"
-                              }
-                            })
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "b-button",
-                          {
-                            attrs: { type: "is-primary" },
-                            on: { click: _vm.sendComment }
-                          },
-                          [_vm._v("Comment")]
-                        )
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.commentBox,
+                          expression: "commentBox"
+                        }
                       ],
-                      1
-                    )
-                  ]
-                )
-              ])
-            ]),
+                      staticClass: "columns"
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "column" },
+                        [
+                          _c(
+                            "b-field",
+                            { attrs: { label: "Name" } },
+                            [
+                              _c("b-input", {
+                                model: {
+                                  value: _vm.name,
+                                  callback: function($$v) {
+                                    _vm.name = $$v
+                                  },
+                                  expression: "name"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-field",
+                            { attrs: { label: "Add a comment" } },
+                            [
+                              _c("b-input", {
+                                attrs: {
+                                  maxlength: "200",
+                                  type: "textarea",
+                                  size: "is-small"
+                                },
+                                model: {
+                                  value: _vm.parent_comment_text,
+                                  callback: function($$v) {
+                                    _vm.parent_comment_text = $$v
+                                  },
+                                  expression: "parent_comment_text"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-button",
+                            {
+                              attrs: { type: "is-primary" },
+                              on: { click: _vm.sendComment }
+                            },
+                            [_vm._v("Comment")]
+                          )
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                ])
+              ]
+            ),
             _vm._v(" "),
             _vm._l(post.comments, function(comment, index) {
               return _c(
