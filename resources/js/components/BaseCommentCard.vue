@@ -22,7 +22,7 @@
             <div class="comments-tab">
               <p
                 class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3"
-                @click="showMoreComments"
+                @click="showMoreComments(comment)"
               >
                 {{ commentBtnText }}
               </p>
@@ -72,9 +72,12 @@ export default {
         return {
           id: 1,
           name: "Bamboo Manalac",
+          parent_id: null,
+          level: 0,
           comment_text: "Tignan mo ang iyong palad",
           updated_at: new Date(),
           created_at: new Date(),
+          enable: true,
         };
       },
     },
@@ -101,9 +104,17 @@ export default {
   },
   data: () => ({
     details: {},
+    name: null,
+    comment_text: null,
   }),
-  showMoreComments() {
-    this.$emit("show-more-comments");
+  methods: {
+    showMoreComments(comment) {
+      this.$emit("show-more-comments", comment);
+    },
+    showCommentBox() {
+      this.$emit("show-comment-box");
+    },
+    sendComment() {}
   },
 };
 </script>

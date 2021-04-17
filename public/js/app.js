@@ -1982,9 +1982,12 @@ __webpack_require__.r(__webpack_exports__);
         return {
           id: 1,
           name: "Bamboo Manalac",
+          parent_id: null,
+          level: 0,
           comment_text: "Tignan mo ang iyong palad",
           updated_at: new Date(),
-          created_at: new Date()
+          created_at: new Date(),
+          enable: true
         };
       }
     },
@@ -2011,11 +2014,19 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      details: {}
+      details: {},
+      name: null,
+      comment_text: null
     };
   },
-  showMoreComments: function showMoreComments() {
-    this.$emit("show-more-comments");
+  methods: {
+    showMoreComments: function showMoreComments(comment) {
+      this.$emit("show-more-comments", comment);
+    },
+    showCommentBox: function showCommentBox() {
+      this.$emit("show-comment-box");
+    },
+    sendComment: function sendComment() {}
   }
 });
 
@@ -2065,7 +2076,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_BaseCommentCard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/BaseCommentCard */ "./resources/js/components/BaseCommentCard.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _mixins__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mixins */ "./resources/js/mixins/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2107,11 +2117,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins__WEBPACK_IMPORTED_MODULE_2__["default"]],
   components: {
     BaseCommentCard: _components_BaseCommentCard__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -2127,7 +2140,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchComments"])), {}, {
     showCommentBox: function showCommentBox() {
-      this.commentBar = !this.commentBar;
+      console.log("comment");
+      this.commentBox = !this.commentBox;
+    },
+    showMoreComments: function showMoreComments(comment) {
+      console.log(comment);
     }
   }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["comments"]))
@@ -57811,7 +57828,11 @@ var render = function() {
                   {
                     staticClass:
                       "subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3",
-                    on: { click: _vm.showMoreComments }
+                    on: {
+                      click: function($event) {
+                        return _vm.showMoreComments(_vm.comment)
+                      }
+                    }
                   },
                   [
                     _vm._v(
@@ -58002,7 +58023,13 @@ var render = function() {
       [
         _c(
           "base-comment-card",
-          { attrs: { commentBar: _vm.commentBar, commentBox: _vm.commentBox } },
+          {
+            attrs: { commentBar: _vm.commentBar, commentBox: _vm.commentBox },
+            on: {
+              "show-more-comments": _vm.showMoreComments,
+              "show-comment-box": _vm.showCommentBox
+            }
+          },
           _vm._l(_vm.comments, function(comment, index) {
             return _c(
               "base-comment-card",

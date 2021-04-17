@@ -1,7 +1,12 @@
 <template>
   <div class="columns is-full is-centered pt-6">
     <div class="column is-6">
-      <base-comment-card :commentBar="commentBar" :commentBox="commentBox">
+      <base-comment-card
+        :commentBar="commentBar"
+        :commentBox="commentBox"
+        @show-more-comments="showMoreComments"
+        @show-comment-box="showCommentBox"
+      >
         <base-comment-card
           v-for="(comment, index) in comments"
           :key="index"
@@ -36,9 +41,8 @@
 <script>
 import BaseCommentCard from "../components/BaseCommentCard";
 import { mapActions, mapGetters } from "vuex";
-import mixin from "../mixins";
+
 export default {
-  mixins: [mixin],
   components: {
     BaseCommentCard,
   },
@@ -53,7 +57,11 @@ export default {
   methods: {
     ...mapActions(["fetchComments"]),
     showCommentBox() {
-      this.commentBar = !this.commentBar;
+      console.log("comment");
+      this.commentBox = !this.commentBox;
+    },
+    showMoreComments(comment) {
+      console.log(comment);
     },
   },
   computed: {
