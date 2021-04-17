@@ -1,8 +1,8 @@
 <template>
-  <div class="card-content">
-    <div class="columns is-full is-mobile">
-      <div class="column is-10 is-offset-2">
-        <div class="card-content card-shade">
+  <div class="card bg-override">
+    <div class="card-content">
+      <div class="columns is-full is-mobile">
+        <div :class="cardClass">
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
@@ -10,32 +10,30 @@
               </figure>
             </div>
             <div class="media-content">
-              <p class="title is-6 has-text-weight-bold">{{ child.name }}</p>
-              <p class="subtitle is-6">{{ username(child.name) }}</p>
+              <p :class="nameClass">Bamboo Manalac</p>
+              <p :class="mentionClass">{{ username("Bamboo Manalac") }}</p>
             </div>
           </div>
 
           <div class="content">
-            {{ child.comment_text }}
+            Tignan mo ang iyong palad
             <br />
-            <time datetime="2016-1-1" class="mgb-small">{{
-              ago(child.updated_at)
-            }}</time>
+            <time datetime="2016-1-1">{{ ago(new Date()) }}</time>
             <div class="comments-tab">
               <p
                 class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold mr-3"
-                @click="viewReplies(child)"
+                @click="showMoreComments"
               >
-                View Replies
+                View Comments
               </p>
               <p
                 class="subtitle is-5 pointer-cursor is-size-6 has-text-weight-bold"
-                @click="showReplyBox"
+                @click="showCommentBox"
               >
-                Reply
+                Add Comment
               </p>
             </div>
-            <div class="columns" v-show="replyBox">
+            <div class="columns" v-show="commentBox">
               <div class="column">
                 <b-field label="Name">
                   <b-input v-model="name"></b-input>
@@ -45,7 +43,7 @@
                     maxlength="200"
                     type="textarea"
                     size="is-small"
-                    v-model="child_comment_text"
+                    v-model="comment_text"
                   ></b-input>
                 </b-field>
                 <b-button type="is-primary" @click="sendComment"
@@ -57,28 +55,33 @@
         </div>
       </div>
     </div>
+
+    <slot></slot>
   </div>
 </template>
 
 <script>
 import mixin from "../mixins";
 export default {
+  name: "BaseCommentCard",
   mixins: [mixin],
-  name: "ReplyCard",
   props: {
-    child: {
-      type: Object,
+    cardClass: {
+      type: String,
+      default: "column is-12"
     },
+    nameClass: {
+      type: String,
+      default: "title is-4 has-text-weight-bold"
+    },
+    mentionClass: {
+      type: String,
+      default: 'subtitle is-6'
+    }
   },
   data: () => ({
-    name: null,
-    child_comment_text: null
+    details: {},
   }),
-  methods: {
-    viewReplies() {
-      
-    }
-  }
 };
 </script>
 
@@ -88,10 +91,20 @@ export default {
 }
 
 .card-shade {
-  background-color: #dfe6e9;
+  // background-color: #ced6e0;
+  background-color: #ffff;
   border: 2px;
   // border-radius: 26px;
 }
+
+.shadow-override {
+  box-shadow: none;
+  border: 0px;
+}
+
+// .bg-override {
+//   background-color: #4bcffa;
+// }
 
 .comments-tab {
   display: flex;
