@@ -6,8 +6,8 @@ const mixin = {
         },
         sendComment() {},
         username(name) {
-            return `@${name.toLowerCase().replace(/ /g, '')}`;
-          }
+            return name ? `@${name.toLowerCase().replace(/ /g, '')}` : '';
+        }
     }
 }
 

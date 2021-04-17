@@ -69913,7 +69913,7 @@ var mixin = {
     },
     sendComment: function sendComment() {},
     username: function username(name) {
-      return "@".concat(name.toLowerCase().replace(/ /g, ''));
+      return name ? "@".concat(name.toLowerCase().replace(/ /g, '')) : '';
     }
   }
 };
