@@ -5,9 +5,6 @@ import Vuex from 'vuex'
 import httpClient from './helpers/http'
 import 'buefy/dist/buefy.css'
 import './bootstrap';
-import {
-    reject
-} from 'lodash'
 
 
 Vue.use(Buefy)
