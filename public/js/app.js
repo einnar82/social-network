@@ -71661,8 +71661,10 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       var objIndex = state.comments.findIndex(function (obj) {
         return obj.id == payload.id;
       });
-      state.comments[objIndex].children = [].concat(_toConsumableArray(payload.comments), _toConsumableArray(state.comments[objIndex].children));
-      state.comments = [].concat(_toConsumableArray(state.comments), [state.comments[objIndex]]);
+      state.comments[objIndex].children = [].concat(_toConsumableArray(payload.comments), _toConsumableArray(state.comments[objIndex].children)); // state.comments = [
+      //     ...state.comments,
+      //     state.comments[objIndex]
+      // ]
     },
     ENABLE_PARENT_COMMENT_BOX: function ENABLE_PARENT_COMMENT_BOX(state, parentComment) {
       var objIndex = state.comments.findIndex(function (obj) {
@@ -71670,12 +71672,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       });
       state.comments[objIndex].enable = !state.comments[objIndex].enable;
     },
-    ENABLE_GRANDCHILD_COMMENT_BOX: function ENABLE_GRANDCHILD_COMMENT_BOX(state, grandChildComment) {
-      console.log("grandChildComment", grandChildComment);
-      var objIndex = state.comments.findIndex(function (obj) {
-        return obj.id == parentComment.id;
-      });
-      state.comments[objIndex].children;
+    ENABLE_GRANDCHILD_COMMENT_BOX: function ENABLE_GRANDCHILD_COMMENT_BOX(state, parentComment) {
+      console.log("grandChildComment", parentComment);
+
+      var children = parentComment.children,
+          otherDetails = _objectWithoutProperties(parentComment, ["children"]); // let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
+      // state.comments[objIndex].children
+
     }
   },
   getters: {
@@ -71702,6 +71705,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
     fetchParentComments: function fetchParentComments(_ref4, id) {
       var commit = _ref4.commit,
           state = _ref4.state;
+      console.log('fetchParentComments');
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
         url: "/comments/".concat(id),
         method: "get"

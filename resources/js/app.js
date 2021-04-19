@@ -43,20 +43,21 @@ const store = new Vuex.Store({
         APPEND_CHILD_COMMENTS: (state, payload) => {
             let objIndex = state.comments.findIndex((obj => obj.id == payload.id));
             state.comments[objIndex].children = [...payload.comments, ...state.comments[objIndex].children]
-            state.comments = [
-                ...state.comments,
-                state.comments[objIndex]
-            ]
+            // state.comments = [
+            //     ...state.comments,
+            //     state.comments[objIndex]
+            // ]
 
         },
         ENABLE_PARENT_COMMENT_BOX: (state, parentComment) => {
             let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
             state.comments[objIndex].enable = !state.comments[objIndex].enable
         },
-        ENABLE_GRANDCHILD_COMMENT_BOX: (state, grandChildComment) => {
-            console.log("grandChildComment", grandChildComment)
-            let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
-            state.comments[objIndex].children
+        ENABLE_GRANDCHILD_COMMENT_BOX: (state, parentComment) => {
+            console.log("grandChildComment", parentComment)
+            let { children, ...otherDetails} = parentComment;
+            // let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
+            // state.comments[objIndex].children
         }
     },
     getters: {
@@ -85,6 +86,7 @@ const store = new Vuex.Store({
             commit,
             state
         }, id) {
+            console.log('fetchParentComments')
             httpClient({
                 url: `/comments/${id}`,
                 method: "get",
