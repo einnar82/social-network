@@ -54,10 +54,18 @@ const store = new Vuex.Store({
             state.comments[objIndex].enable = !state.comments[objIndex].enable
         },
         ENABLE_GRANDCHILD_COMMENT_BOX: (state, parentComment) => {
-            console.log("grandChildComment", parentComment)
-            let { children, ...otherDetails} = parentComment;
-            // let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
-            // state.comments[objIndex].children
+            console.log("parentComment", parentComment)
+            parentComment.children[parentComment.index].enable = !parentComment.children[parentComment.index].enable
+            const updatedComments = state.comments.map(comment =>
+                comment.id === parentComment.id ? {
+                    ...parentComment
+                } : comment
+            );
+
+            state.comments = [
+                ...updatedComments
+            ]
+            console.log('updatedComment', updatedComments)
         }
     },
     getters: {
@@ -79,8 +87,8 @@ const store = new Vuex.Store({
         enableGrandchildCommentBox({
             commit,
             state
-        }, comment) {
-            commit('ENABLE_GRANDCHILD_COMMENT_BOX', comment)
+        }, payload) {
+            commit('ENABLE_GRANDCHILD_COMMENT_BOX', payload)
         },
         fetchParentComments({
             commit,

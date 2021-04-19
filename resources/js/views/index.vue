@@ -29,7 +29,7 @@
             nameClass="title is-6 has-text-weight-bold"
             commentBtnText="View Replies"
             @show-more-comments="showMoreGrandchildComments(comment)"
-            @show-comment-box="showGrandchildCommentBox(comment)"
+            @show-comment-box="showGrandchildCommentBox(comment, index)"
             @send-comment="sendGrandchildComment"
           >
             <base-comment-card
@@ -94,8 +94,8 @@ export default {
       this.addComment({ ...comment, parent_id: comment.comment_id });
     },
     showMoreGrandchildComments(comment) {},
-    showGrandchildCommentBox(comment) {
-      this.enableGrandchildCommentBox(comment);
+    showGrandchildCommentBox(comment, index) {
+      this.enableGrandchildCommentBox({ ...comment, index });
     },
     sendGrandchildComment(comment) {},
   },

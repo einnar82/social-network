@@ -2182,8 +2182,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }));
     },
     showMoreGrandchildComments: function showMoreGrandchildComments(comment) {},
-    showGrandchildCommentBox: function showGrandchildCommentBox(comment) {
-      this.enableGrandchildCommentBox(comment);
+    showGrandchildCommentBox: function showGrandchildCommentBox(comment, index) {
+      this.enableGrandchildCommentBox(_objectSpread(_objectSpread({}, comment), {}, {
+        index: index
+      }));
     },
     sendGrandchildComment: function sendGrandchildComment(comment) {}
   }),
@@ -58114,7 +58116,7 @@ var render = function() {
                         return _vm.showMoreGrandchildComments(comment)
                       },
                       "show-comment-box": function($event) {
-                        return _vm.showGrandchildCommentBox(comment)
+                        return _vm.showGrandchildCommentBox(comment, index)
                       },
                       "send-comment": _vm.sendGrandchildComment
                     }
@@ -71673,12 +71675,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       state.comments[objIndex].enable = !state.comments[objIndex].enable;
     },
     ENABLE_GRANDCHILD_COMMENT_BOX: function ENABLE_GRANDCHILD_COMMENT_BOX(state, parentComment) {
-      console.log("grandChildComment", parentComment);
-
-      var children = parentComment.children,
-          otherDetails = _objectWithoutProperties(parentComment, ["children"]); // let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
-      // state.comments[objIndex].children
-
+      console.log("parentComment", parentComment);
+      parentComment.children[parentComment.index].enable = !parentComment.children[parentComment.index].enable;
+      var updatedComments = state.comments.map(function (comment) {
+        return comment.id === parentComment.id ? _objectSpread({}, parentComment) : comment;
+      });
+      state.comments = _toConsumableArray(updatedComments);
+      console.log('updatedComment', updatedComments);
     }
   },
   getters: {
@@ -71697,10 +71700,10 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
           state = _ref2.state;
       commit('ENABLE_PARENT_COMMENT_BOX', comment);
     },
-    enableGrandchildCommentBox: function enableGrandchildCommentBox(_ref3, comment) {
+    enableGrandchildCommentBox: function enableGrandchildCommentBox(_ref3, payload) {
       var commit = _ref3.commit,
           state = _ref3.state;
-      commit('ENABLE_GRANDCHILD_COMMENT_BOX', comment);
+      commit('ENABLE_GRANDCHILD_COMMENT_BOX', payload);
     },
     fetchParentComments: function fetchParentComments(_ref4, id) {
       var commit = _ref4.commit,
