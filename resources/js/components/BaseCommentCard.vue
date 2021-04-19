@@ -46,7 +46,7 @@
                     v-model="comment_text"
                   ></b-input>
                 </b-field>
-                <b-button type="is-primary" @click="sendComment"
+                <b-button type="is-primary" @click="sendComment(comment)"
                   >Comment</b-button
                 >
               </div>
@@ -114,13 +114,17 @@ export default {
     showCommentBox(comment) {
       this.$emit("show-comment-box", comment);
     },
-    sendComment() {
-      this.$emit("send-comment", {
-        comment_id: this.comment.id,
-        name: this.name,
-        comment_text: this.comment_text,
-        parent_id: this.comment.parent_id,
-      });
+    sendComment(payload) {
+      this.$emit(
+        "send-comment",
+        {
+          comment_id: this.comment.id,
+          name: this.name,
+          comment_text: this.comment_text,
+          parent_id: this.comment.parent_id,
+        },
+        payload
+      );
       this.name = null;
       this.comment_text = null;
     },

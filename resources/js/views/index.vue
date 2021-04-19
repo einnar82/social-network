@@ -30,7 +30,7 @@
             commentBtnText="View Replies"
             @show-more-comments="showMoreGrandchildComments(comment)"
             @show-comment-box="showGrandchildCommentBox(comment, index)"
-            @send-comment="sendGrandchildComment"
+            @send-comment="sendThisGrandchildComment"
           >
             <base-comment-card
               v-for="(grandchild, index) in child.grand_children"
@@ -71,6 +71,7 @@ export default {
       "enableParentCommentBox",
       "enableGrandchildCommentBox",
       "addChildComment",
+      "sendGrandchildComment",
       "fetchParentComments",
     ]),
     showCommentBox(comment) {
@@ -97,7 +98,16 @@ export default {
     showGrandchildCommentBox(comment, index) {
       this.enableGrandchildCommentBox({ ...comment, index });
     },
-    sendGrandchildComment(comment) {},
+    sendThisGrandchildComment(childComment, payload) {
+      console.log('form params', childComment)
+      console.log('payload', payload)
+      const params = {
+        parent_id: payload.id,
+        comment_text: childComment.comment_text,
+        name: childComment.name
+      }
+      this.sendGrandchildComment(params)
+    },
   },
   computed: {
     ...mapGetters(["comments"]),
