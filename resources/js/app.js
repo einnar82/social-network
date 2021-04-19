@@ -42,9 +42,12 @@ const store = new Vuex.Store({
         },
         APPEND_CHILD_COMMENTS: (state, payload) => {
             let objIndex = state.comments.findIndex((obj => obj.id == payload.id));
-            console.log(state.comments[objIndex])
-            console.log("payload.comments", payload.comments)
             state.comments[objIndex].children = [...payload.comments, ...state.comments[objIndex].children]
+            state.comments = [
+                ...state.comments,
+                state.comments[objIndex]
+            ]
+
         },
         ENABLE_PARENT_COMMENT_BOX: (state, parentComment) => {
             let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));

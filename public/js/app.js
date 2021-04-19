@@ -71661,9 +71661,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       var objIndex = state.comments.findIndex(function (obj) {
         return obj.id == payload.id;
       });
-      console.log(state.comments[objIndex]);
-      console.log("payload.comments", payload.comments);
       state.comments[objIndex].children = [].concat(_toConsumableArray(payload.comments), _toConsumableArray(state.comments[objIndex].children));
+      state.comments = [].concat(_toConsumableArray(state.comments), [state.comments[objIndex]]);
     },
     ENABLE_PARENT_COMMENT_BOX: function ENABLE_PARENT_COMMENT_BOX(state, parentComment) {
       var objIndex = state.comments.findIndex(function (obj) {
