@@ -2188,14 +2188,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }));
     },
     sendThisGrandchildComment: function sendThisGrandchildComment(childComment, payload) {
-      console.log('form params', childComment);
-      console.log('payload', payload);
       var params = {
         parent_id: payload.id,
         comment_text: childComment.comment_text,
         name: childComment.name
       };
-      this.sendGrandchildComment(params);
+      this.sendGrandchildComment(_objectSpread(_objectSpread({}, params), {}, {
+        payload: payload
+      }));
     }
   }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["comments"]))
@@ -71678,7 +71678,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       });
       state.comments[objIndex].children = [].concat(_toConsumableArray(payload.comments), _toConsumableArray(state.comments[objIndex].children));
     },
-    APPEND_GRANDCHILD_COMMENTS: function APPEND_GRANDCHILD_COMMENTS(state, payload) {},
+    APPEND_GRANDCHILD_COMMENTS: function APPEND_GRANDCHILD_COMMENTS(state, payload) {
+      console.log(payload);
+    },
     ENABLE_PARENT_COMMENT_BOX: function ENABLE_PARENT_COMMENT_BOX(state, parentComment) {
       var objIndex = state.comments.findIndex(function (obj) {
         return obj.id == parentComment.id;
@@ -71792,17 +71794,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
               data = _response$data4.data,
               others = _objectWithoutProperties(_response$data4, ["data"]);
 
-          var updatedComment = _objectSpread(_objectSpread({}, data), {}, {
-            enable: false
+          console.log(data);
+          commit('APPEND_GRANDCHILD_COMMENTS', {
+            grandchild: data,
+            payload: payload.payload
           });
-
-          console.log(data); // if (payload.parent_id) {
-          //     commit('ADD_CHILD_COMMENT', updatedComment)
-          //     resolve(updatedComment)
-          // } else {
-          //     commit('ADD_COMMENT', updatedComment)
-          //     resolve(updatedComment)
-          // }
         })["catch"](function (error) {
           reject(error);
         });

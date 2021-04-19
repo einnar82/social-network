@@ -45,7 +45,7 @@ const store = new Vuex.Store({
             state.comments[objIndex].children = [...payload.comments, ...state.comments[objIndex].children]
         },
         APPEND_GRANDCHILD_COMMENTS: (state, payload) => {
-            
+            console.log(payload)
         },
         ENABLE_PARENT_COMMENT_BOX: (state, parentComment) => {
             let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
@@ -173,19 +173,11 @@ const store = new Vuex.Store({
                         data,
                         ...others
                     } = response.data
-                    const updatedComment = {
-                        ...data,
-                        enable: false
-                    }
-
                     console.log(data)
-                    // if (payload.parent_id) {
-                    //     commit('ADD_CHILD_COMMENT', updatedComment)
-                    //     resolve(updatedComment)
-                    // } else {
-                    //     commit('ADD_COMMENT', updatedComment)
-                    //     resolve(updatedComment)
-                    // }
+                    commit('APPEND_GRANDCHILD_COMMENTS', {
+                        grandchild: data,
+                        payload: payload.payload
+                    })
 
                 }).catch(error => {
                     reject(error)

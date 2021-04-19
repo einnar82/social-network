@@ -99,14 +99,12 @@ export default {
       this.enableGrandchildCommentBox({ ...comment, index });
     },
     sendThisGrandchildComment(childComment, payload) {
-      console.log('form params', childComment)
-      console.log('payload', payload)
       const params = {
         parent_id: payload.id,
         comment_text: childComment.comment_text,
-        name: childComment.name
-      }
-      this.sendGrandchildComment(params)
+        name: childComment.name,
+      };
+      this.sendGrandchildComment({ ...params, payload: payload });
     },
   },
   computed: {
