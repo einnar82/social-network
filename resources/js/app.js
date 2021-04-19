@@ -45,7 +45,33 @@ const store = new Vuex.Store({
             state.comments[objIndex].children = [...payload.comments, ...state.comments[objIndex].children]
         },
         APPEND_GRANDCHILD_COMMENTS: (state, payload) => {
-            console.log(payload)
+            let {
+                grandchild,
+                child
+            } = payload
+            console.log('grandchild', grandchild)
+            child.grand_children = [{
+                ...grandchild
+            }, ...child.grand_children]
+            child.enable = !child.enable;
+            console.log('child', child)
+            let parentCommentIndex = state.comments.findIndex((obj => obj.id == child.parent_id));
+            let parentComment = state.comments[parentCommentIndex]
+            let updatedChildren = parentComment.children.map(childComment =>
+                childComment.id === child.id ? {
+                    ...child
+                } : {
+                    ...childComment
+                }
+            );
+
+            state.comments = [{
+                ...parentComment
+            }]
+
+            console.log('updatedChildren', updatedChildren)
+            console.log('parentComment', parentComment)
+
         },
         ENABLE_PARENT_COMMENT_BOX: (state, parentComment) => {
             let objIndex = state.comments.findIndex((obj => obj.id == parentComment.id));
@@ -173,12 +199,14 @@ const store = new Vuex.Store({
                         data,
                         ...others
                     } = response.data
-                    console.log(data)
                     commit('APPEND_GRANDCHILD_COMMENTS', {
                         grandchild: data,
-                        payload: payload.payload
+                        child: payload.payload
                     })
-
+                    console.log({
+                        grandchild: data,
+                        child: payload.payload
+                    })
                 }).catch(error => {
                     reject(error)
                 })

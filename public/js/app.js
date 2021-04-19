@@ -2140,6 +2140,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -58141,7 +58142,8 @@ var render = function() {
                         comment: grandchild,
                         cardClass: "column is-9 is-offset-3",
                         nameClass: "title is-6 has-text-weight-bold",
-                        commentBtnText: "View Replies"
+                        commentBtnText: "View Replies",
+                        commentBox: false
                       }
                     })
                   }),
@@ -71679,7 +71681,22 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       state.comments[objIndex].children = [].concat(_toConsumableArray(payload.comments), _toConsumableArray(state.comments[objIndex].children));
     },
     APPEND_GRANDCHILD_COMMENTS: function APPEND_GRANDCHILD_COMMENTS(state, payload) {
-      console.log(payload);
+      var grandchild = payload.grandchild,
+          child = payload.child;
+      console.log('grandchild', grandchild);
+      child.grand_children = [_objectSpread({}, grandchild)].concat(_toConsumableArray(child.grand_children));
+      child.enable = !child.enable;
+      console.log('child', child);
+      var parentCommentIndex = state.comments.findIndex(function (obj) {
+        return obj.id == child.parent_id;
+      });
+      var parentComment = state.comments[parentCommentIndex];
+      var updatedChildren = parentComment.children.map(function (childComment) {
+        return childComment.id === child.id ? _objectSpread({}, child) : _objectSpread({}, childComment);
+      });
+      state.comments = [_objectSpread({}, parentComment)];
+      console.log('updatedChildren', updatedChildren);
+      console.log('parentComment', parentComment);
     },
     ENABLE_PARENT_COMMENT_BOX: function ENABLE_PARENT_COMMENT_BOX(state, parentComment) {
       var objIndex = state.comments.findIndex(function (obj) {
@@ -71794,10 +71811,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
               data = _response$data4.data,
               others = _objectWithoutProperties(_response$data4, ["data"]);
 
-          console.log(data);
           commit('APPEND_GRANDCHILD_COMMENTS', {
             grandchild: data,
-            payload: payload.payload
+            child: payload.payload
+          });
+          console.log({
+            grandchild: data,
+            child: payload.payload
           });
         })["catch"](function (error) {
           reject(error);

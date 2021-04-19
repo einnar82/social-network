@@ -39,6 +39,7 @@
               cardClass="column is-9 is-offset-3"
               nameClass="title is-6 has-text-weight-bold"
               commentBtnText="View Replies"
+              :commentBox=false
             />
           </base-comment-card>
         </base-comment-card>
