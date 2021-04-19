@@ -24,7 +24,7 @@ class AddCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'parent_id' => 'sometimes|required|integer',
+            'parent_id' => 'integer|nullable|exists:comments,id',
             'name' => 'required|string',
             'comment_text' => 'required|string'
         ];

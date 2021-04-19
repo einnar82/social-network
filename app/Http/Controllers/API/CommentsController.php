@@ -13,7 +13,20 @@ class CommentsController extends Controller
 {
     public function addComment(AddCommentRequest $request)
     {
-        return new CommentResource(Comment::create($request->all()));
+        $params = [
+            'comment_text' => $request->get('comment_text'),
+            'parent_id' => $request->get('parent_id'),
+            'name' => $request->get('name'),
+        ];
+
+        if ($params['parent_id']) {
+            $parent = Comment::findOrFail($params['parent_id']);
+            $params['level'] = $parent->level == Comment::MAX_LEVEL ? Comment::MAX_LEVEL : $parent->level + 1;
+            $params['parent_id'] = $parent->level == Comment::MAX_LEVEL ? $parent->parent_id : $parent->id;
+        } else {
+            $params['level'] = 1;
+        }
+        return new CommentResource(Comment::create($params));
     }
 
     public function getComments(Request $request)
@@ -23,6 +36,11 @@ class CommentsController extends Controller
 
     public function getChildComments($id)
     {
-        return CommentResource::collection(Comment::findOrFail($id)->children()->get());
+        return CommentResource::collection(Comment::findOrFail($id)->children);
+    }
+
+    public function getGrandChildComments($id)
+    {
+        return CommentResource::collection(Comment::findOrFail($id)->grand_children);
     }
 }
