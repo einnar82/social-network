@@ -28,7 +28,7 @@
             cardClass="column is-10 is-offset-2"
             nameClass="title is-6 has-text-weight-bold"
             commentBtnText="View Replies"
-            @show-more-comments="showMoreGrandchildComments(comment)"
+            @show-more-comments="showMoreGrandchildComments(comment, index)"
             @show-comment-box="showGrandchildCommentBox(comment, index)"
             @send-comment="sendThisGrandchildComment"
           >
@@ -39,7 +39,7 @@
               cardClass="column is-9 is-offset-3"
               nameClass="title is-6 has-text-weight-bold"
               commentBtnText="View Replies"
-              :commentBox=false
+              :commentBox="false"
             />
           </base-comment-card>
         </base-comment-card>
@@ -74,6 +74,7 @@ export default {
       "addChildComment",
       "sendGrandchildComment",
       "fetchParentComments",
+      "fetchGrandchildComments",
     ]),
     showCommentBox(comment) {
       this.commentBox = !this.commentBox;
@@ -95,7 +96,9 @@ export default {
     sendParentComment(comment) {
       this.addComment({ ...comment, parent_id: comment.comment_id });
     },
-    showMoreGrandchildComments(comment) {},
+    showMoreGrandchildComments(comment, index) {
+      this.fetchGrandchildComments({ ...comment, index });
+    },
     showGrandchildCommentBox(comment, index) {
       this.enableGrandchildCommentBox({ ...comment, index });
     },

@@ -2157,7 +2157,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     this.fetchComments();
   },
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchComments", "addComment", "fetchOtherComments", "enableParentCommentBox", "enableGrandchildCommentBox", "addChildComment", "sendGrandchildComment", "fetchParentComments"])), {}, {
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchComments", "addComment", "fetchOtherComments", "enableParentCommentBox", "enableGrandchildCommentBox", "addChildComment", "sendGrandchildComment", "fetchParentComments", "fetchGrandchildComments"])), {}, {
     showCommentBox: function showCommentBox(comment) {
       this.commentBox = !this.commentBox;
     },
@@ -2182,7 +2182,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         parent_id: comment.comment_id
       }));
     },
-    showMoreGrandchildComments: function showMoreGrandchildComments(comment) {},
+    showMoreGrandchildComments: function showMoreGrandchildComments(comment, index) {
+      this.fetchGrandchildComments(_objectSpread(_objectSpread({}, comment), {}, {
+        index: index
+      }));
+    },
     showGrandchildCommentBox: function showGrandchildCommentBox(comment, index) {
       this.enableGrandchildCommentBox(_objectSpread(_objectSpread({}, comment), {}, {
         index: index
@@ -58127,7 +58131,7 @@ var render = function() {
                     },
                     on: {
                       "show-more-comments": function($event) {
-                        return _vm.showMoreGrandchildComments(comment)
+                        return _vm.showMoreGrandchildComments(comment, index)
                       },
                       "show-comment-box": function($event) {
                         return _vm.showGrandchildCommentBox(comment, index)
@@ -71684,7 +71688,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       var grandchild = payload.grandchild,
           child = payload.child;
       console.log('grandchild', grandchild);
-      child.grand_children = [_objectSpread({}, grandchild)].concat(_toConsumableArray(child.grand_children));
+      child.grand_children = Array.isArray(grandchild) ? [].concat(_toConsumableArray(grandchild), _toConsumableArray(child.grand_children)) : [_objectSpread({}, grandchild)].concat(_toConsumableArray(child.grand_children));
       child.enable = !child.enable;
       console.log('child', child);
       var parentCommentIndex = state.comments.findIndex(function (obj) {
@@ -71733,17 +71737,44 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
           state = _ref3.state;
       commit('ENABLE_GRANDCHILD_COMMENT_BOX', payload);
     },
-    fetchParentComments: function fetchParentComments(_ref4, id) {
+    fetchGrandchildComments: function fetchGrandchildComments(_ref4, payload) {
       var commit = _ref4.commit,
           state = _ref4.state;
-      console.log('fetchParentComments');
+      console.log('fetchGrandchildComments', payload.children[payload.index]);
+      var parentId = payload.children[payload.index].id;
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
-        url: "/comments/".concat(id),
+        url: "/comments/grandchild/".concat(parentId),
         method: "get"
       }).then(function (response) {
         var _response$data = response.data,
             data = _response$data.data,
             others = _objectWithoutProperties(_response$data, ["data"]);
+
+        var updatedComments = data.map(function (item) {
+          return _objectSpread(_objectSpread({}, item), {}, {
+            enable: false
+          });
+        });
+        commit('APPEND_GRANDCHILD_COMMENTS', {
+          grandchild: data,
+          child: payload.children[payload.index]
+        }); // commit('APPEND_CHILD_COMMENTS', {
+        //     comments: updatedComments,
+        //     id
+        // })
+      });
+    },
+    fetchParentComments: function fetchParentComments(_ref5, id) {
+      var commit = _ref5.commit,
+          state = _ref5.state;
+      console.log('fetchParentComments');
+      Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
+        url: "/comments/".concat(id),
+        method: "get"
+      }).then(function (response) {
+        var _response$data2 = response.data,
+            data = _response$data2.data,
+            others = _objectWithoutProperties(_response$data2, ["data"]);
 
         var updatedComments = data.map(function (item) {
           return _objectSpread(_objectSpread({}, item), {}, {
@@ -71757,16 +71788,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
         });
       });
     },
-    fetchComments: function fetchComments(_ref5) {
-      var commit = _ref5.commit,
-          state = _ref5.state;
+    fetchComments: function fetchComments(_ref6) {
+      var commit = _ref6.commit,
+          state = _ref6.state;
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
         url: "/comments",
         method: "get"
       }).then(function (response) {
-        var _response$data2 = response.data,
-            data = _response$data2.data,
-            others = _objectWithoutProperties(_response$data2, ["data"]);
+        var _response$data3 = response.data,
+            data = _response$data3.data,
+            others = _objectWithoutProperties(_response$data3, ["data"]);
 
         var updatedComments = data.map(function (item) {
           return _objectSpread(_objectSpread({}, item), {}, {
@@ -71778,16 +71809,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
         commit('FETCH_DETAILS', others);
       });
     },
-    fetchOtherComments: function fetchOtherComments(_ref6) {
-      var commit = _ref6.commit,
-          state = _ref6.state;
+    fetchOtherComments: function fetchOtherComments(_ref7) {
+      var commit = _ref7.commit,
+          state = _ref7.state;
       Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
         url: state.details.links.next,
         method: "get"
       }).then(function (response) {
-        var _response$data3 = response.data,
-            data = _response$data3.data,
-            others = _objectWithoutProperties(_response$data3, ["data"]);
+        var _response$data4 = response.data,
+            data = _response$data4.data,
+            others = _objectWithoutProperties(_response$data4, ["data"]);
 
         var updatedComments = data.map(function (item) {
           return _objectSpread(_objectSpread({}, item), {}, {
@@ -71798,18 +71829,18 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
         commit('FETCH_DETAILS', others);
       });
     },
-    sendGrandchildComment: function sendGrandchildComment(_ref7, payload) {
-      var commit = _ref7.commit,
-          state = _ref7.state;
+    sendGrandchildComment: function sendGrandchildComment(_ref8, payload) {
+      var commit = _ref8.commit,
+          state = _ref8.state;
       return new Promise(function (resolve, reject) {
         Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
           url: "/comments",
           method: "post",
           data: _objectSpread({}, payload)
         }).then(function (response) {
-          var _response$data4 = response.data,
-              data = _response$data4.data,
-              others = _objectWithoutProperties(_response$data4, ["data"]);
+          var _response$data5 = response.data,
+              data = _response$data5.data,
+              others = _objectWithoutProperties(_response$data5, ["data"]);
 
           commit('APPEND_GRANDCHILD_COMMENTS', {
             grandchild: data,
@@ -71824,18 +71855,18 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
         });
       });
     },
-    addComment: function addComment(_ref8, payload) {
-      var commit = _ref8.commit,
-          state = _ref8.state;
+    addComment: function addComment(_ref9, payload) {
+      var commit = _ref9.commit,
+          state = _ref9.state;
       return new Promise(function (resolve, reject) {
         Object(_helpers_http__WEBPACK_IMPORTED_MODULE_4__["default"])({
           url: "/comments",
           method: "post",
           data: _objectSpread({}, payload)
         }).then(function (response) {
-          var _response$data5 = response.data,
-              data = _response$data5.data,
-              others = _objectWithoutProperties(_response$data5, ["data"]);
+          var _response$data6 = response.data,
+              data = _response$data6.data,
+              others = _objectWithoutProperties(_response$data6, ["data"]);
 
           var updatedComment = _objectSpread(_objectSpread({}, data), {}, {
             enable: false,

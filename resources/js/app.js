@@ -50,9 +50,12 @@ const store = new Vuex.Store({
                 child
             } = payload
             console.log('grandchild', grandchild)
-            child.grand_children = [{
+            child.grand_children = Array.isArray(grandchild) ? [
+                ...grandchild, ...child.grand_children
+            ] : [{
                 ...grandchild
-            }, ...child.grand_children]
+            }, ...child.grand_children];
+
             child.enable = !child.enable;
             console.log('child', child)
             let parentCommentIndex = state.comments.findIndex((obj => obj.id == child.parent_id));
@@ -111,6 +114,36 @@ const store = new Vuex.Store({
             state
         }, payload) {
             commit('ENABLE_GRANDCHILD_COMMENT_BOX', payload)
+        },
+        fetchGrandchildComments({
+            commit,
+            state
+        }, payload) {
+            console.log('fetchGrandchildComments', payload.children[payload.index])
+            const parentId = payload.children[payload.index].id
+            httpClient({
+                url: `/comments/grandchild/${parentId}`,
+                method: "get",
+            }).then((response) => {
+                const {
+                    data,
+                    ...others
+                } = response.data
+                const updatedComments = data.map(item => {
+                    return {
+                        ...item,
+                        enable: false
+                    }
+                })
+                commit('APPEND_GRANDCHILD_COMMENTS', {
+                    grandchild: data,
+                    child: payload.children[payload.index]
+                })
+                // commit('APPEND_CHILD_COMMENTS', {
+                //     comments: updatedComments,
+                //     id
+                // })
+            });
         },
         fetchParentComments({
             commit,
