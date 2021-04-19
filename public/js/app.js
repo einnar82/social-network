@@ -71679,7 +71679,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
       var objIndex = state.comments.findIndex(function (obj) {
         return obj.id == payload.id;
       });
-      state.comments[objIndex].children = [].concat(_toConsumableArray(payload.comments), _toConsumableArray(state.comments[objIndex].children));
+      state.comments[objIndex].children = _toConsumableArray(payload.comments);
     },
     APPEND_GRANDCHILD_COMMENTS: function APPEND_GRANDCHILD_COMMENTS(state, payload) {
       var grandchild = payload.grandchild,

@@ -39,7 +39,7 @@ const store = new Vuex.Store({
         },
         APPEND_CHILD_COMMENTS: (state, payload) => {
             let objIndex = state.comments.findIndex((obj => obj.id == payload.id));
-            state.comments[objIndex].children = [...payload.comments, ...state.comments[objIndex].children]
+            state.comments[objIndex].children = [...payload.comments]
         },
         APPEND_GRANDCHILD_COMMENTS: (state, payload) => {
             let {
