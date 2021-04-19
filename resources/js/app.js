@@ -56,23 +56,11 @@ const store = new Vuex.Store({
                 ...grandchild
             }, ...child.grand_children];
 
-            child.enable = !child.enable;
+            child.enable = Array.isArray(grandchild) ? child.enable : !child.enable;
             console.log('child', child)
             let parentCommentIndex = state.comments.findIndex((obj => obj.id == child.parent_id));
             let parentComment = state.comments[parentCommentIndex]
-            let updatedChildren = parentComment.children.map(childComment =>
-                childComment.id === child.id ? {
-                    ...child
-                } : {
-                    ...childComment
-                }
-            );
-
-            state.comments = [{
-                ...parentComment
-            }]
-
-            console.log('updatedChildren', updatedChildren)
+            state.comments[parentCommentIndex] = parentComment
             console.log('parentComment', parentComment)
 
         },
@@ -136,7 +124,7 @@ const store = new Vuex.Store({
                     }
                 })
                 commit('APPEND_GRANDCHILD_COMMENTS', {
-                    grandchild: data,
+                    grandchild: updatedComments,
                     child: payload.children[payload.index]
                 })
                 // commit('APPEND_CHILD_COMMENTS', {

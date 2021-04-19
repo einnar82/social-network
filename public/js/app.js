@@ -71689,17 +71689,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
           child = payload.child;
       console.log('grandchild', grandchild);
       child.grand_children = Array.isArray(grandchild) ? [].concat(_toConsumableArray(grandchild), _toConsumableArray(child.grand_children)) : [_objectSpread({}, grandchild)].concat(_toConsumableArray(child.grand_children));
-      child.enable = !child.enable;
+      child.enable = Array.isArray(grandchild) ? child.enable : !child.enable;
       console.log('child', child);
       var parentCommentIndex = state.comments.findIndex(function (obj) {
         return obj.id == child.parent_id;
       });
       var parentComment = state.comments[parentCommentIndex];
-      var updatedChildren = parentComment.children.map(function (childComment) {
-        return childComment.id === child.id ? _objectSpread({}, child) : _objectSpread({}, childComment);
-      });
-      state.comments = [_objectSpread({}, parentComment)];
-      console.log('updatedChildren', updatedChildren);
+      state.comments[parentCommentIndex] = parentComment;
       console.log('parentComment', parentComment);
     },
     ENABLE_PARENT_COMMENT_BOX: function ENABLE_PARENT_COMMENT_BOX(state, parentComment) {
@@ -71756,7 +71752,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
           });
         });
         commit('APPEND_GRANDCHILD_COMMENTS', {
-          grandchild: data,
+          grandchild: updatedComments,
           child: payload.children[payload.index]
         }); // commit('APPEND_CHILD_COMMENTS', {
         //     comments: updatedComments,
